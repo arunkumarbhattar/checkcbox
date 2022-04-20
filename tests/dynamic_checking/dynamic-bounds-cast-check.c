@@ -1,24 +1,8 @@
 // The following lines are for the clang automated test suite
 //
-// RUN: %clang %s -o %t -Werror
-// RUN: %t pass1 | FileCheck %s --check-prefixes=CHECK,CHECK-PASS,CHECK-PASS-1
-// RUN: %t pass2 | FileCheck %s --check-prefixes=CHECK,CHECK-PASS,CHECK-PASS-2
-// RUN: %t pass3 | FileCheck %s --check-prefixes=CHECK,CHECK-PASS,CHECK-PASS-3
-// RUN: %t fail1 | FileCheck %s --check-prefixes=CHECK,CHECK-FAIL,CHECK-FAIL-1
-// RUN: %t fail2 | FileCheck %s --check-prefixes=CHECK,CHECK-FAIL,CHECK-FAIL-2
-// RUN: %t fail3 | FileCheck %s --check-prefixes=CHECK,CHECK-FAIL,CHECK-FAIL-3
-// RUN: %t fail4 | FileCheck %s --check-prefixes=CHECK,CHECK-FAIL,CHECK-FAIL-4
-// RUN: %t fail5 | FileCheck %s --check-prefixes=CHECK,CHECK-FAIL,CHECK-FAIL-5
-// RUN: %t fail6 | FileCheck %s --check-prefixes=CHECK,CHECK-FAIL,CHECK-FAIL-6
-// RUN: %t fail7 | FileCheck %s --check-prefixes=CHECK,CHECK-FAIL,CHECK-FAIL-7
-// RUN: %t fail8 | FileCheck %s --check-prefixes=CHECK,CHECK-FAIL,CHECK-FAIL-8
+// RUN: %clang_cc1 -verify -verify-ignore-unexpected=warning -verify-ignore-unexpected=note %s
 
-#include <assert.h>
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "../../include/stdchecked.h"
+#include <stdchecked.h>
 
 void passing_test_1(void);
 void passing_test_2(void);
@@ -28,45 +12,17 @@ void failing_test_1(void);
 void failing_test_2(void);
 void failing_test_3(void);
 void failing_test_4(int k);
-void failing_test_5(array_ptr<char> pc : count(len), unsigned len);
-void failing_test_6(array_ptr<char> pc : count(len), unsigned len);
-void failing_test_7(array_ptr<char> pc : count(len), unsigned len);
+void failing_test_5(_TArray_ptr<char> pc : count(len), unsigned len);
+void failing_test_6(_TArray_ptr<char> pc : count(len), unsigned len);
+void failing_test_7(_TArray_ptr<char> pc : count(len), unsigned len);
 void failing_test_8(unsigned len);
 
-// Handle an out-of-bounds reference by immediately exiting. This causes
-// some output to be missing.
-void handle_error(int err) {
-  _Exit(0);
-}
 
 // This signature for main is exactly what we want here,
 // it also means any uses of argv[i] are checked too!
 int main(int argc, _Array_ptr<char*> argv : count(argc)) {
 
-  // Set up the handler for a failing bounds check.  Currently the Checked C
-  // clang implementation raises a SIGILL when a bounds check fails.  This
-  // may change in the future.
-  signal(SIGILL, handle_error);
-
-  // This makes sure output is not buffered for when
-  // we hit errors.
-  int err = setvbuf(stdout, NULL, _IONBF, 0);
-  if (err) {
-    // CHECK-NOT: Error Setting Up Buffering
-    puts("Error Setting Up Buffering");
-    return EXIT_FAILURE;
-  }
-
-  if (argc < 2) {
-    // CHECK-NOT: Requires Argument
-    puts("Requires Argument");
-    return EXIT_FAILURE;
-  }
-
-  int a checked[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-
-  // CHECK: Starting Test
-  puts("Starting Test");
+  int a _Checked[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
   if (strcmp(argv[1], "pass1") == 0) {
     // CHECK-PASS-1: Printable0
@@ -115,40 +71,37 @@ int main(int argc, _Array_ptr<char*> argv : count(argc)) {
     // CHECK-FAIL-4-NOT: Unexpected Success
     failing_test_4(5);
   } else if (strcmp(argv[1], "fail5") == 0) {
-    array_ptr<char> p : count(12) = "\0\0\0\0\0\0\0\0abcd";
+    _TArray_ptr<char> p : count(12) = "\0\0\0\0\0\0\0\0abcd"; //expected-error {{initializing '_TArray_ptr<char>' with an expression of incompatible type 'char [13]'}}
     // CHECK-FAIL-5: Successful pointer conversion
     // CHECK-FAIL-5-NOT: Unexpected Success
-    _Static_assert(sizeof(int) <= 8, "update test for integers larger than 64 bits.");
     failing_test_5(p, sizeof(int) + 1);
     failing_test_5(p, sizeof(int) - 1);
   } else if (strcmp(argv[1], "fail6") == 0) {
-    array_ptr<char> p : count(4) = "abcd";
-    // CHECK-FAIL-6: Successful conversion to ptr<void>
+    _TArray_ptr<char> p : count(4) = "abcd"; //expected-error {{initializing '_TArray_ptr<char>' with an expression of incompatible type 'char [5]'}}
+    // CHECK-FAIL-6: Successful conversion to_TPtr<void>
     // CHECK-FAIL-6-NOT: Unexpected Success
     failing_test_6(p, 1);
     failing_test_6(p, 0);
   } else if (strcmp(argv[1], "fail7") == 0) {
-    array_ptr<char> p : count(4) = "abcd";
+    _TArray_ptr<char> p : count(4) = "abcd"; //expected-error {{initializing '_TArray_ptr<char>' with an expression of incompatible type 'char [5]'}}
     // CHECK-FAIL-7: Successful conversion to void *
     // CHECK-FAIL-7-NOT: Unexpected Success
     failing_test_7(p, 1);
     failing_test_7(p, 0);
   } else if (strcmp(argv[1], "fail8") == 0) {
-    // CHECK-FAIL-8: Successful conversion to nt_array_ptr<const char>
+    // CHECK-FAIL-8: Successful conversion to _TNt__TArray_ptr<const char>
     // CHECK-FAIL-8-NOT: Unexpected Success
     failing_test_8(5);
     failing_test_8(7);
   } else {
     // CHECK-NOT: Unexpected Test Name
-    puts("Unexpected Test Name");
-    return EXIT_FAILURE;
+    printf("Unexpected Test Name");
   }
 
   // CHECK-PASS: All Dynamic Checks Passed
   // CHECK-FAIL-NOT: All Dynamic Checks Passed
-  puts("All Dynamic Checks Passed");
-
-  return EXIT_SUCCESS;
+  printf("All Dynamic Checks Passed");
+  return 0;
 }
 
 // dynamic_check(r != NULL) && dynamic_check(r <= r && r+1 <= r+10) - > OK
@@ -157,164 +110,175 @@ int main(int argc, _Array_ptr<char*> argv : count(argc)) {
 // dynamic_check((r+3) != NULL) && dynamic_check(r <= r && r+15 <= r+10) - > OK
 // dynamic_check("abcdef", count(2)) -> OK.
 void passing_test_1(void) {
-  ptr<int> q = 0;
-  int r checked[10] = {0,1,2,3,4,5,6,7,8,9};
-  array_ptr<int> s : count(5) = r;
+ _TPtr<int> q = 0;
+  int r _Checked[10] = {0,1,2,3,4,5,6,7,8,9};
+  _TArray_ptr<int> s : count(5) = r; //expected-error {{initializing '_TArray_ptr<int>' with an expression of incompatible type 'int _Checked[10]}}
 
-  q = _Dynamic_bounds_cast<ptr<int>>(r);
   printf("Printable0\n");
 
-  q = _Dynamic_bounds_cast<array_ptr<int>>(r, count(3));
+  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r, count(3));
   printf("Printable1\n");
 
-  q = _Dynamic_bounds_cast<array_ptr<int>>(r+3, count(3));
+  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r+3, count(3));
   printf("Printable2\n");
 
-  q = _Dynamic_bounds_cast<array_ptr<int>>(r, bounds(s, s+3));
+  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r, bounds(s, s+3));
   printf("Printable3\n");
 
-  nt_array_ptr<const char> p : count(2) =
-    _Dynamic_bounds_cast<nt_array_ptr<const char>>("abcdef", count(2));
+  _TNt_array_ptr<const char> p : count(2) =
+    _Tainted_Dynamic_bounds_cast<_TNt_array_ptr<const char>>("abcdef", count(2));
   printf("Printable4\n");
 
-  puts("Expected Success");
+  printf("Expected Success");
+  return;
 }
 
 // dynamic_check(base == NULL || ...)
 // dynamic_check(base == NULL || ...)
 void passing_test_2(void) {
-  ptr<int> q = 0;
-  int r checked[10] = {0,1,2,3,4,5,6,7,8,9};
-  array_ptr<int> s : count(5) = r;
+ _TPtr<int> q = 0;
+  int r _Checked[10] = {0,1,2,3,4,5,6,7,8,9};
+  _TArray_ptr<int> s : count(5) = r; //expected-error {{initializing '_TArray_ptr<int>' with an expression of incompatible type 'int _Checked[10]'}}
 
   // constant folded
-  q = _Dynamic_bounds_cast<ptr<int>>(NULL);
+  q = _Tainted_Dynamic_bounds_cast<ptr<int>>(NULL); //expected-error{{use of undeclared identifier 'NULL'}}
   printf("Printable0\n");
 
-  q = _Dynamic_bounds_cast<array_ptr<int>>(NULL, bounds(r, r+5));
+  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(NULL, bounds(r, r+5));//expected-error{{use of undeclared identifier 'NULL'}}
   printf("Printable1\n");
 
-  s = NULL;
-  q = _Dynamic_bounds_cast<ptr<int>>(s);
+  s = NULL;//expected-error{{use of undeclared identifier 'NULL'}}
+  q = _Tainted_Dynamic_bounds_cast<_TPtr<int>>(s);
   printf("Printable2\n");
 
-  q = _Dynamic_bounds_cast<array_ptr<int>>(s, bounds(r, r+5));
+  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(s, bounds(r, r+5));
   printf("Printable3\n");
 
-  puts("Expected Success");
+  printf("Expected Success");
+  return;
 }
 
 // Test dynamic checks involving conversions to void pointers.
 void passing_test_3(void) {
   int i = 10;
-  ptr<int> pi = &i;
-  ptr<void> pv = pi;
+ _TPtr<int> pi = &i; //expected-error {{initializing '_TPtr<int>' with an expression of incompatible type 'int *'}}
+ _TPtr<void> pv = pi;
   void *unchecked_pv = 0;
-  ptr<void> p1 = _Dynamic_bounds_cast<ptr<void>>(pi);
+ _TPtr<void> p1 = _Tainted_Dynamic_bounds_cast<_TPtr<void>>(pi);
   printf("Passed p1");
-  ptr<void> p2 = _Dynamic_bounds_cast<ptr<void>>(pv);
+ _TPtr<void> p2 = _Tainted_Dynamic_bounds_cast<_TPtr<void>>(pv);
   printf("Passed p2");
-  unchecked_pv = _Dynamic_bounds_cast<void *>(pi);
+  unchecked_pv = _Tainted_Dynamic_bounds_cast<void *>(pi); //expected-error {{expected _TPtr}}
   printf("Passed unchecked_pv");
-  ptr<void> p3 = _Assume_bounds_cast<ptr<void>>(unchecked_pv);
+ _TPtr<void> p3 = _Tainted_Assume_bounds_cast<_TPtr<void>>(unchecked_pv);
   printf("Passed p3");
   void *p4 = _Assume_bounds_cast<void *>(unchecked_pv);
   printf("Passed p4");
-  puts("Expected Success");
+  printf("Expected Success");
+  return;
 }
 
 // dynamic_check(r != NULL) && dynamic_check(r <= r && r+15 <= r+10) -> FAIL
 void failing_test_1(void) {
-  ptr<int> q = 0;
-  int r checked[10] = {0,1,2,3,4,5,6,7,8,9};
-  q = _Dynamic_bounds_cast<array_ptr<int>>(r, count(15));
+ _TPtr<int> q = 0;
+  int r _Checked[10] = {0,1,2,3,4,5,6,7,8,9};
+  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r, count(15));
 
   printf("Unprintable\n");
 
-  puts("Unexpected Success");
+  printf("Unexpected Success");
+  return;
 }
 
 // dynamic_check((r+8) != NULL) && dynamic_check(r <= r+8 && (r+8+3) <= r+10) -> FAIL
 void failing_test_2(void) {
-  ptr<int> q = 0;
-  int r checked[10] = {0,1,2,3,4,5,6,7,8,9};
-  q = _Dynamic_bounds_cast<array_ptr<int>>(r+8, count(3));
+ _TPtr<int> q = 0;
+  int r _Checked[10] = {0,1,2,3,4,5,6,7,8,9};
+  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r+8, count(3));
 
   printf("Unprintable\n");
 
-  puts("Unexpected Success");
+  printf("Unexpected Success");
+  return;
 }
 
 // dynamic_check(r != NULL) && dynamic_check(r <= s && s+3 <= r+10) -> FAIL
 void failing_test_3(void) {
-  ptr<int> q = 0;
-  int r checked[10] = {0,1,2,3,4,5,6,7,8,9};
-  array_ptr<int> s : count(5) = r;
+ _TPtr<int> q = 0;
+  int r _Checked[10] = {0,1,2,3,4,5,6,7,8,9};
+  _TArray_ptr<int> s : count(5) = r; //expected-error {{initializing '_TArray_ptr<int>' with an expression of incompatible type 'int _Checked[10]'}}
 
-  q = _Dynamic_bounds_cast<ptr<int>>(r);
+  q = _Tainted_Dynamic_bounds_cast<_TPtr<int>>(r);
   printf("Printable0\n");
 
-  q = _Dynamic_bounds_cast<array_ptr<int>>(r, count(5));
+  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r, count(5));
   printf("Printable1\n");
 
-  q = _Dynamic_bounds_cast<array_ptr<int>>(r, bounds(s, s+3));
+  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r, bounds(s, s+3));
   printf("Printable2\n");
 
   s = 0;
-  q = _Dynamic_bounds_cast<array_ptr<int>>(r, bounds(s, s+3));
+  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r, bounds(s, s+3));
 
   printf("Unprintable\n");
 
-  puts("Unexpected Success");
+  printf("Unexpected Success");
+  return;
 }
 
 // bounds_cast insert dynamic_check(r <= r && (r+5) <= r+10) -> OK;
 // dereference insert dynamic_check(s <= s+5 && (s+5) < s+3) -> FAIL
 // k = 5
 void failing_test_4(int k) {
-  int r checked[10] = {0,1,2,3,4,5,6,7,8,9};
-  array_ptr<int> s : count(3) = _Dynamic_bounds_cast<array_ptr<int>>(r, count(5));
+  int r _Checked[10] = {0,1,2,3,4,5,6,7,8,9};
+  _TArray_ptr<int> s : count(3) = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r, count(5));
 
   printf("Printable1\n");
   printf("Unprintable2: %d\n", *(s+k));
 
-  puts("Unexpected Success");
+  printf("Unexpected Success");
+  return;
 }
 
-// TEst dynamic checks involving possibly failig conversions to ptr<int>.
-void failing_test_5(array_ptr<char> pc : count(len), unsigned len) {
-  ptr<int> pi = _Dynamic_bounds_cast<ptr<int>>(pc);
+// TEst dynamic checks involving possibly failig conversions to_TPtr<int>.
+void failing_test_5(_TArray_ptr<char> pc : count(len), unsigned len) {
+ _TPtr<int> pi = _Tainted_Dynamic_bounds_cast<_TPtr<int>>(pc);
   if (len < sizeof(int))
-    puts("Unexpected Success");
+    printf("Unexpected Success");
   else if (*pi == 0)
-    puts("Successful pointer conversion");
+    printf("Successful pointer conversion");
+  return;
 }
 
-// Test dynamic checks involving possibly failing conversions to ptr<void>.
-void failing_test_6(array_ptr<char> pc : count(len), unsigned len) {
-  ptr<void> pv = _Dynamic_bounds_cast<ptr<void>>(pc);
+// Test dynamic checks involving possibly failing conversions to_TPtr<void>.
+void failing_test_6(_TArray_ptr<char> pc : count(len), unsigned len) {
+ _TPtr<void> pv = _Tainted_Dynamic_bounds_cast<_TPtr<void>>(pc);
   if (len == 0)
-    puts("Unexpected Success");
+    printf("Unexpected Success");
   else if (pv != 0)
-    puts("Successful conversion to ptr<void>");
+    printf("Successful conversion to_TPtr<void>");
+  return;
 }
 
 // Test dynamic checks involving possibly failing conversions to void *.
-void failing_test_7(array_ptr<char> pc : count(len), unsigned len) {
- void *pv = _Dynamic_bounds_cast<void *>(pc);
+void failing_test_7(_TArray_ptr<char> pc : count(len), unsigned len) {
+ void *pv = _Tainted_Dynamic_bounds_cast<void *>(pc); //expected-error {{expected _TPtr}}
   if (len == 0)
-    puts("Unexpected Success");
+    printf("Unexpected Success");
   else if (pv != 0)
-    puts("Successful conversion to void *");
+    printf("Successful conversion to void *");
+  return;
 }
 
 // Test dynamic checks involving possibly failing conversions from
 // string literals.
 void failing_test_8(unsigned len) {
- nt_array_ptr<const char> p : count(len) =
-   _Dynamic_bounds_cast<nt_array_ptr<const char>>("123456", count(len));
+ _TNt_array_ptr<const char> p : count(len) =
+   _Tainted_Dynamic_bounds_cast<_TNt_array_ptr<const char>>("123456", count(len));
   if (len > 6)
-    puts("Unexpected Success");
+    printf("Unexpected Success");
   else if ((len == 0 && p != 0) || *p == '1')
-    puts("Successful conversion to nt_array_ptr<const char>");
+    printf("Successful conversion to _TNt_array_ptr<const char>");
+  return;
 }
+

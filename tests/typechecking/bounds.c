@@ -590,8 +590,8 @@ void invalid_local_var_bounds_decl(void)
   array_ptr<void> t55 : count(1) = 0; // expected-error {{expected 't55' to have a non-void pointer type}}
   array_ptr<void (void)> t56 : count(1);  // expected-error {{declared as _Array_ptr to function of type 'void (void)'; use _Ptr to function instead}}
 
-  int *t57 : count(1) = 0;          // expected-error {{bounds declaration not allowed for local variable with unchecked pointer type}}
-  int t58[5] : count(5);            // expected-error {{bounds declaration not allowed for local variable with unchecked array type}}
+  int *t57 : count(1) = 0;          // expected-error {{bounds declaration not allowed for local variable with untainted or unchecked pointer type}}
+  int t58[5] : count(5);            // expected-error {{bounds declaration not allowed for local variable with untainted or unchecked array type}}
 
   // byte_count
   float t60 : byte_count(8);                  // expected-error {{expected 't60' to have a pointer, array, or integer type}}
@@ -601,8 +601,8 @@ void invalid_local_var_bounds_decl(void)
   ptr<int> t64 : byte_count(sizeof(int)) = 0; // expected-error {{bounds declaration not allowed because 't64' has a _Ptr type}}
   array_ptr<void (void)> t65 : byte_count(1); // expected-error {{declared as _Array_ptr to function of type 'void (void)'; use _Ptr to function instead}}
 
-  int *t67 : byte_count(sizeof(int)) = 0;     // expected-error {{bounds declaration not allowed for local variable with unchecked pointer type}}
-  int t68[5] : byte_count(5 * sizeof(int));   // expected-error {{bounds declaration not allowed for local variable with unchecked array type}}
+  int *t67 : byte_count(sizeof(int)) = 0;     // expected-error {{bounds declaration not allowed for local variable with untainted or unchecked pointer type}}
+  int t68[5] : byte_count(5 * sizeof(int));   // expected-error {{bounds declaration not allowed for local variable with untainted or unchecked array type}}
 
   // bounds
   float t70 : bounds(arr, arr + 1);             // expected-error {{expected 't70' to have a pointer, array, or integer type}}
@@ -612,8 +612,8 @@ void invalid_local_var_bounds_decl(void)
   ptr<int> t74 : bounds(arr, arr + 1) = 0;      // expected-error {{bounds declaration not allowed because 't74' has a _Ptr type}}
   array_ptr<void (void)> t75 : bounds(arr, arr + 1);  // expected-error {{declared as _Array_ptr to function of type 'void (void)'; use _Ptr to function instead}}
 
-  int *t78 : bounds(arr, arr + 1) = 0;          // expected-error {{bounds declaration not allowed for local variable with unchecked pointer type}}
-  int t79[5] : bounds(arr, arr + 1);            // expected-error {{bounds declaration not allowed for local variable with unchecked array type}}
+  int *t78 : bounds(arr, arr + 1) = 0;          // expected-error {{bounds declaration not allowed for local variable with untainted or unchecked pointer type}}
+  int t79[5] : bounds(arr, arr + 1);            // expected-error {{bounds declaration not allowed for local variable with untainted or unchecked array type}}
 }
 
 //

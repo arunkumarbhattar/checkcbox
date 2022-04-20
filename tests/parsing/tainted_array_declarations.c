@@ -234,7 +234,7 @@ _TPtr<_TPtr<_TPtr<int> (_TPtr<int> x, _TPtr<int> y)>_Nt_checked[5]>// expected-e
 // Typedefs that define tainted pointers pointing
 // to checked and Unchecked pointer types
 //
-
+_TPtr<int> test1;
 typedef _TPtr<int> arr_ty[5];
 typedef _TPtr<int> incomplete_arr_ty[];
 typedef _TPtr<int> checked_arr_ty _Checked[5];
@@ -283,8 +283,8 @@ void parse_operators_with_types(void) {
     int arr _Checked[5];
     _TPtr<int> px = (_TPtr<int>) &x;
     _TArray_ptr<int> pax = (_TArray_ptr<int>) &x;
-    pax = arr;
-    // ptr to array type
+     pax = arr; //expected-error {{assigning to '_TArray_ptr<int>' from incompatible type 'int _Checked[5]'}}
+
     _TPtr<int _Checked[5]> parr = 0;// expected-error {{Tainted Pointers cannot point to Checked pointers}}
     parr = &arr; //expected-error {{use of undeclared identifier 'parr'; did you mean 'arr'?}} expected-error {{array type 'int _Checked[5]' is not assignable}}
     parr = (int (*)_Checked[5]) &arr; //expected-error {{use of undeclared identifier 'parr'; did you mean 'arr'?}} expected-error {{array type 'int _Checked[5]' is not assignable}}

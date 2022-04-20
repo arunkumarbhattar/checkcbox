@@ -336,20 +336,20 @@ void f8 (void) {
 void f9 (void) checked {
   int a;
   float b;
-  int* p : count(1) = &a; // expected-error {{bounds declaration not allowed for local variable with unchecked pointer type}}
-  char* s : count(10); // expected-error {{bounds declaration not allowed for local variable with unchecked pointer type}}
+  int* p : count(1) = &a; // expected-error {{bounds declaration not allowed for local variable with untainted or unchecked pointer type}}
+  char* s : count(10); // expected-error {{bounds declaration not allowed for local variable with untainted or unchecked pointer type}}
 }
 
 // test unchecked pointer with bounds expression, in a checked scope
 void f10 (void) checked {
-  char* p : count(5); // expected-error {{bounds declaration not allowed for local variable with unchecked pointer type}}
+  char* p : count(5); // expected-error {{bounds declaration not allowed for local variable with untainted or unchecked pointer type}}
 }
 
 // For unchecked_pointer_with_bounds_expr_in_checked_scope, we need to consider struct also
 void f11 (void) checked {
   int a;
-  int* p : count(5); // expected-error {{bounds declaration not allowed for local variable with unchecked pointer type}}
-  void* src : count(10);  // expected-error {{bounds declaration not allowed for local variable with unchecked pointer type}}
+  int* p : count(5); // expected-error {{bounds declaration not allowed for local variable with untainted or unchecked pointer type}}
+  void* src : count(10);  // expected-error {{bounds declaration not allowed for local variable with untainted or unchecked pointer type}}
 
    //a struct with unchecked pointers with bounds exprs in a checked scope
   typedef struct {
