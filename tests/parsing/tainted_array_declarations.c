@@ -281,8 +281,8 @@ void parse_operators_with_types(void) {
     // of bounds declarations
     int x = 0;
     int arr _Checked[5];
-    _TPtr<int> px = (_TPtr<int>) &x;
-    _TArray_ptr<int> pax = (_TArray_ptr<int>) &x;
+    _TPtr<int> px = (_TPtr<int>) &x; //expected-error {{Untainted Pointer 'int *' cannot be cast to Tainted Pointer '_TPtr<int>' Address pointed by 'int *' should not be exposed to Unchecked Region}}
+    _TArray_ptr<int> pax = (_TArray_ptr<int>) &x; //expected-error {{Untainted Pointer 'int *' cannot be cast to Tainted Pointer '_TArray_ptr<int>' Address pointed by 'int *' should not be exposed to Unchecked Region}}
      pax = arr; //expected-error {{assigning to '_TArray_ptr<int>' from incompatible type 'int _Checked[5]'}}
 
     _TPtr<int _Checked[5]> parr = 0;// expected-error {{Tainted Pointers cannot point to Checked pointers}}
@@ -290,7 +290,9 @@ void parse_operators_with_types(void) {
     parr = (int (*)_Checked[5]) &arr; //expected-error {{use of undeclared identifier 'parr'; did you mean 'arr'?}} expected-error {{array type 'int _Checked[5]' is not assignable}}
     parr = (int (*)_Checked[5]) ((int (*)_Checked[]) &arr); //expected-error {{use of undeclared identifier 'parr'; did you mean 'arr'?}} expected-error {{array type 'int _Checked[5]' is not assignable}}
     // ptr to function type
-    _TPtr<int (int x, int y)> pfunc = (_TPtr<int (int x, int y)>) 0;
+    _TPtr<int (int x, int y)> pfunc_not_allowed = (_TPtr<int (int x, int y)>) 0; //expected-error{{Untainted Pointer 'int' cannot be cast to Tainted Pointer '_TPtr<int (int, int)>' Address pointed by 'int' should not be exposed to Unchecked Region}}
+    _TPtr<int> ppi = 0;
+    _TPtr<_TPtr<int> (int x, int y)> pfunc_allowed = (_TPtr<_TPtr<int> (int x, int y)>)ppi ;
     _TPtr<_TPtr<int (int x, int y)>_Checked [5]> ptr_to_pfunc_arr = (_TPtr<_TPtr<int (int x, int y)>_Checked[5]>) 0;// expected-error {{Tainted Pointers cannot point to Checked pointers}}
 }
 
