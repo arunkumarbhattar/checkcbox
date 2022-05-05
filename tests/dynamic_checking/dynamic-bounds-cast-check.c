@@ -116,17 +116,17 @@ void passing_test_1(void) {
 
   printf("Printable0\n");
 
-  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r, count(3));
+  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r, count(3)); //expected-error {{Only Tainted-pointers allowed as part of bounds expression for Tainted Cast Operations}}
   printf("Printable1\n");
 
-  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r+3, count(3));
+  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r+3, count(3)); //expected-error {{Only Tainted-pointers allowed as part of bounds expression for Tainted Cast Operations}}
   printf("Printable2\n");
 
-  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r, bounds(s, s+3));
+  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r, bounds(s, s+3)); //expected-error {{Only Tainted-pointers allowed as part of bounds expression for Tainted Cast Operations}}
   printf("Printable3\n");
 
   _TNt_array_ptr<const char> p : count(2) =
-    _Tainted_Dynamic_bounds_cast<_TNt_array_ptr<const char>>("abcdef", count(2));
+    _Tainted_Dynamic_bounds_cast<_TNt_array_ptr<const char>>("abcdef", count(2)); //expected-error {{Only Tainted-pointers allowed as part of bounds expression for Tainted Cast Operations}}
   printf("Printable4\n");
 
   printf("Expected Success");
@@ -170,7 +170,7 @@ void passing_test_3(void) {
   printf("Passed p2");
   unchecked_pv = _Tainted_Dynamic_bounds_cast<void *>(pi); //expected-error {{expected _TPtr}}
   printf("Passed unchecked_pv");
- _TPtr<void> p3 = _Tainted_Assume_bounds_cast<_TPtr<void>>(unchecked_pv);
+ _TPtr<void> p3 = _Tainted_Assume_bounds_cast<_TPtr<void>>(unchecked_pv); //expected-error {{Only Tainted-pointers allowed as part of bounds expression for Tainted Cast Operations}}
   printf("Passed p3");
   void *p4 = _Assume_bounds_cast<void *>(unchecked_pv);
   printf("Passed p4");
@@ -182,7 +182,7 @@ void passing_test_3(void) {
 void failing_test_1(void) {
  _TPtr<int> q = 0;
   int r _Checked[10] = {0,1,2,3,4,5,6,7,8,9};
-  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r, count(15));
+  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r, count(15)); //expected-error {{Only Tainted-pointers allowed as part of bounds expression for Tainted Cast Operations}}
 
   printf("Unprintable\n");
 
@@ -194,7 +194,7 @@ void failing_test_1(void) {
 void failing_test_2(void) {
  _TPtr<int> q = 0;
   int r _Checked[10] = {0,1,2,3,4,5,6,7,8,9};
-  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r+8, count(3));
+  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r+8, count(3)); //expected-error {{Only Tainted-pointers allowed as part of bounds expression for Tainted Cast Operations}}
 
   printf("Unprintable\n");
 
@@ -211,14 +211,14 @@ void failing_test_3(void) {
   q = _Tainted_Dynamic_bounds_cast<_TPtr<int>>(r);
   printf("Printable0\n");
 
-  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r, count(5));
+  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r, count(5)); //expected-error {{Only Tainted-pointers allowed as part of bounds expression for Tainted Cast Operations}}
   printf("Printable1\n");
 
-  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r, bounds(s, s+3));
+  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r, bounds(s, s+3)); //expected-error {{Only Tainted-pointers allowed as part of bounds expression for Tainted Cast Operations}}
   printf("Printable2\n");
 
   s = 0;
-  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r, bounds(s, s+3));
+  q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r, bounds(s, s+3)); //expected-error {{Only Tainted-pointers allowed as part of bounds expression for Tainted Cast Operations}}
 
   printf("Unprintable\n");
 
@@ -231,7 +231,7 @@ void failing_test_3(void) {
 // k = 5
 void failing_test_4(int k) {
   int r _Checked[10] = {0,1,2,3,4,5,6,7,8,9};
-  _TArray_ptr<int> s : count(3) = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r, count(5));
+  _TArray_ptr<int> s : count(3) = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r, count(5)); //expected-error {{Only Tainted-pointers allowed as part of bounds expression for Tainted Cast Operations}}
 
   printf("Printable1\n");
   printf("Unprintable2: %d\n", *(s+k));
@@ -274,7 +274,7 @@ void failing_test_7(_TArray_ptr<char> pc : count(len), unsigned len) {
 // string literals.
 void failing_test_8(unsigned len) {
  _TNt_array_ptr<const char> p : count(len) =
-   _Tainted_Dynamic_bounds_cast<_TNt_array_ptr<const char>>("123456", count(len));
+   _Tainted_Dynamic_bounds_cast<_TNt_array_ptr<const char>>("123456", count(len)); //expected-error {{Only Tainted-pointers allowed as part of bounds expression for Tainted Cast Operations}}
   if (len > 6)
     printf("Unexpected Success");
   else if ((len == 0 && p != 0) || *p == '1')
