@@ -208,7 +208,7 @@ void failing_test_3(void) {
   int r _Checked[10] = {0,1,2,3,4,5,6,7,8,9};
   _TArray_ptr<int> s : count(5) = r; //expected-error {{initializing '_TArray_ptr<int>' with an expression of incompatible type 'int _Checked[10]'}}
 
-  q = _Tainted_Dynamic_bounds_cast<_TPtr<int>>(r);
+  q = _Tainted_Dynamic_bounds_cast<_TPtr<int>>(r); // expected-error {{Only Tainted-pointers allowed as part of bounds expression for Tainted Cast Operations}}
   printf("Printable0\n");
 
   q = _Tainted_Dynamic_bounds_cast<_TArray_ptr<int>>(r, count(5)); //expected-error {{Only Tainted-pointers allowed as part of bounds expression for Tainted Cast Operations}}
