@@ -11,7 +11,7 @@
 #pragma CHECKED_SCOPE push
 #pragma CHECKED_SCOPE off
 #endif
-
+#include <string_tainted.h>
 #include_next <string.h>
 
 #ifdef __checkedc
@@ -20,4 +20,5 @@
 
 #else // checkedc && implicit include enabled
 #include <string_checked.h>
+#include <string_tainted.h>
 #endif

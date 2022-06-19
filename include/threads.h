@@ -28,4 +28,5 @@
 
 #else // checkedc && implicit include enabled
 #include <threads_checked.h>
+#include <threads_tainted.h>
 #endif

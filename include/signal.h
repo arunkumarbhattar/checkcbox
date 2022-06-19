@@ -20,4 +20,5 @@
 
 #else // checkedc && implicit include enabled
 #include <signal_checked.h>
+#include <signal_tainted.h>
 #endif

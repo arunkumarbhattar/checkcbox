@@ -29,7 +29,6 @@ double atof(const char *s : itype(_Nt_array_ptr<const char>));
 int atoi(const char *s : itype(_Nt_array_ptr<const char>));
 long int atol(const char *s : itype(_Nt_array_ptr<const char>));
 long long int atoll(const char *s : itype(_Nt_array_ptr<const char>));
-
 double strtod(const char * restrict nptr :
                 itype(restrict _Nt_array_ptr<const char>),
               char ** restrict endptr :
@@ -75,15 +74,13 @@ _Itype_for_any(T) void *calloc(size_t nmemb, size_t size) : itype(_Array_ptr<T>)
 _Itype_for_any(T) void free(void *pointer : itype(_Array_ptr<T>) byte_count(0));
 _Itype_for_any(T) void *malloc(size_t size) : itype(_Array_ptr<T>) byte_count(size);
 _Itype_for_any(T) void *realloc(void *pointer : itype(_Array_ptr<T>) byte_count(1), size_t size) : itype(_Array_ptr<T>) byte_count(size);
-
 char *getenv(const char *n : itype(_Nt_array_ptr<const char>)) : itype(_Nt_array_ptr<char>);
 
 int atexit(void ((*func)(void)) : itype(_Ptr<void (void)>));
 int atquick_exit(void ((*func)(void)) : itype(_Ptr<void (void)>));
 
 int system(const char *s : itype(_Nt_array_ptr<const char>));
-
-// TODO: compar needs to have an itype that has bounds
+// TODO: compare needs to have an itype that has bounds
 // on parameters based on size.  Currently we are requiring that
 // bounds in parameters lists be closed with respect to variables
 // in the parameter list.
@@ -121,7 +118,7 @@ size_t mbstowcs(wchar_t * restrict pwcs : count(n),
 size_t wcstombs(char * restrict output : count(n),
                 const wchar_t * restrict pwcs :
                   itype(restrict _Nt_array_ptr<const wchar_t>),
-                size_t n);
+	         size_t n);
 
 #pragma CHECKED_SCOPE pop
 

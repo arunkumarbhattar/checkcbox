@@ -18,6 +18,8 @@
 #if __has_builtin(__builtin_object_size)
 size_t __builtin_object_size(const void* obj : itype(_Array_ptr<const void>),
                              int i);
+size_t __t_builtin_object_size(_TArray_ptr<const void> obj,
+                               int i);
 #endif
 
 #ifdef _undef__has_builtin

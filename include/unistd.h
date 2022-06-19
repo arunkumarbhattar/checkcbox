@@ -29,4 +29,5 @@
 
 #else // checkedc && implicit include enabled
 #include <unistd_checked.h>
+#include <unistd_tainted.h>
 #endif

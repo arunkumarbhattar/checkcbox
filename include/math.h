@@ -20,4 +20,5 @@
 
 #else // checkedc && implicit include enabled
 #include <math_checked.h>
+#include <math_tainted.h>
 #endif
