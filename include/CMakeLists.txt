@@ -8,62 +8,29 @@
 # So we place the header files with the compiler.
 
 set(files
-  assert_checked.h
   assert_tainted.h
-  assert.h
-  errno_checked.h
   errno_tainted.h
-  errno.h
-  fenv_checked.h
   fenv_tainted.h
-  fenv.h
-  inttypes_checked.h
-  inttypes_checked_internal.h
   inttypes_tainted_internal.h
-  math_checked.h
   math_tainted.h
-  math.h
-  signal_checked.h
   signal_tainted.h
-  signal.h
-  stdchecked.h
-  stdio_checked.h
   stdio_tainted.h
-  stdio.h
-  stdlib_checked.h
   stdlib_tainted.h
-  stdlib.h
-  string_checked.h
   string_tainted.h
-  string.h
-  threads_checked.h
   threads_tainted.h
-  threads.h
-  time_checked.h
   time_tainted.h
-  time.h
-  unistd_checked.h
   unistd_tainted.h
-  unistd.h
-  _builtin_stdio_checked.h
   _builtin_stdio_tainted.h
-  _builtin_string_checked.h
         _builtin_string_tainted.h
-  _builtin_common.h
-  checkedc_extensions.h
         checkcbox_extensions.h
   )
 
 set(posix_arpa_files
-  arpa/inet_checked.h
         arpa/inet_tainted.h
-  arpa/inet.h
   )
 
 set(posix_sys_files
-  sys/socket_checked.h
         sys/socket_tainted.h
-  sys/socket.h
 )
 
 # Hack - compute the CLANG version from the LLVM version.  The
@@ -85,12 +52,12 @@ foreach( f ${files} ${posix_arpa_files} ${posix_sys_files} )
   list(APPEND out_files ${dst})
 endforeach( f )
 
-add_custom_target(checkedc-headers ALL DEPENDS ${out_files})
-set_target_properties(checkedc-headers PROPERTIES FOLDER "Misc")
+add_custom_target(checkcbox-headers ALL DEPENDS ${out_files})
+set_target_properties(checkcbox-headers PROPERTIES FOLDER "Misc")
 
 install(
   FILES ${files}
-  COMPONENT checkedc-headers
+  COMPONENT checkcbox-headers
   PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
   DESTINATION lib${LLVM_LIBDIR_SUFFIX}/clang/${CHECKEDC_CLANG_VERSION}/include
   )
@@ -110,9 +77,9 @@ install(
   )
 
 if (NOT CMAKE_CONFIGURATION_TYPES) # don't add this for IDE's.
-  add_custom_target(install-checkedc-headers
-    DEPENDS checkedc-headers
+  add_custom_target(install-checkcbox-headers
+    DEPENDS checkcbox-headers
     COMMAND "${CMAKE_COMMAND}"
-            -DCMAKE_INSTALL_COMPONENT=checkedc-headers
+            -DCMAKE_INSTALL_COMPONENT=checkcbox-headers
             -P "${CMAKE_BINARY_DIR}/cmake_install.cmake")
 endif()

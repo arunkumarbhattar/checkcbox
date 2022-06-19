@@ -26,7 +26,7 @@ static unsigned long c_fetch_sandbox_heap_address();
 // TODO: express alignment constraints once where clauses have been added.
 _Itype_for_any(T) _TArray_ptr<T> t_malloc(size_t size)
 {
-        void* temp = (void*)c_malloc(size);
+        void* temp = (void*) c_malloc(size);
         return (_TArray_ptr<T>) temp;
 };
 
