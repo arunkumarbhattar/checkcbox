@@ -1,5 +1,5 @@
-#ifndef __STDCHECKED_H
-#define __STDCHECKED_H
+#ifndef __STDTAINTED_H
+#define __STDTAINTED_H
 
 #define ptr _TPtr
 #define array_ptr _TArray_ptr
@@ -12,4 +12,4 @@
 #define assume_bounds_cast _Tainted_Assume_bounds_cast
 #define return_value _Return_value
 
-#endif /* __STDCHECKED_H */
+#endif /* __STDTAINTED_H */

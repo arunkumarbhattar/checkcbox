@@ -23,6 +23,7 @@ set(files
   _builtin_stdio_tainted.h
         _builtin_string_tainted.h
         checkcbox_extensions.h
+
   )
 
 set(posix_arpa_files
@@ -48,7 +49,7 @@ foreach( f ${files} ${posix_arpa_files} ${posix_sys_files} )
   add_custom_command(OUTPUT ${dst}
     DEPENDS ${src}
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${src} ${dst}
-    COMMENT "Copying Checked C's ${f}...")
+    COMMENT "Copying CHECKCBOX's ${f}...")
   list(APPEND out_files ${dst})
 endforeach( f )
 
