@@ -6,43 +6,48 @@
 // specification.                                                      //
 /////////////////////////////////////////////////////////////////////////
 
-#ifdef __checkcbox
+#ifdef __checkedc
 #pragma CHECKED_SCOPE push
 #pragma CHECKED_SCOPE off
 #endif
 
 #include_next <time.h>
 
-#ifdef __checkcbox
+#ifdef __checkedc
 #pragma CHECKED_SCOPE pop
 #endif
 
-#ifdef __checkcbox
+#ifdef __checkedc
 #ifndef __TIME_CHECKED_H
 #define __TIME_CHECKED_H
 
 #pragma CHECKED_SCOPE push
 #pragma CHECKED_SCOPE on
 
-time_t t_mktime(_Ptr<struct tm> timeptr);
+time_t mktime(struct tm *timeptr : itype(_Ptr<struct tm>));
 
-int t_timespec_get(_Ptr<struct timespec> ts,
-                 int base);
+int timespec_get(struct timespec *ts : itype(_Ptr<struct timespec>),
+                   int base);
 
-_Nt_array_ptr<char> t_asctime(_TPtr<const struct tm> timeptr);
+char *asctime(const struct tm *timeptr : itype(_Ptr<const struct tm>)) :
+                                                itype(_Nt_array_ptr<char>);
 
-_Nt_array_ptr<char> t_ctime(_TPtr<const time_t> timer);
+char *ctime(const time_t *timer : itype(_Ptr<const time_t>)) :
+                                           itype(_Nt_array_ptr<char>);
 
-_Ptr<struct tm> t_gmtime(_TPtr<const time_t> timer);
+struct tm *gmtime(const time_t *timer : itype(_Ptr<const time_t>)) :
+                                                 itype(_Ptr<struct tm>);
 
-_Ptr<struct tm> t_localtime(_TPtr<const time_t> timer);
+struct tm *localtime(const time_t *timer : itype(_Ptr<const time_t>)) :
+                                                    itype(_Ptr<struct tm>);
 
-size_t t_strftime(_TArray_ptr<char> restrict output : count(maxsize),
-                size_t maxsize,
-                  _TNt_array_ptr<const char> restrict format,
-                  _TPtr<const struct tm> restrict timeptr);
+size_t strftime(char * restrict output : count(maxsize),
+                  size_t maxsize,
+                  const char * restrict format : itype(restrict _Nt_array_ptr<const char>),
+                  const struct tm * restrict timeptr :
+                itype(restrict _Ptr<const struct tm>));
 
 #pragma CHECKED_SCOPE pop
 
 #endif // guard
-#endif // Tainted C
+#endif // Checked C

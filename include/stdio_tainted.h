@@ -13,6 +13,10 @@
 #pragma CHECKED_SCOPE off
 #endif
 
+#ifdef __checkcbox
+#pragma CHECKED_SCOPE pop
+#endif
+
 #include_next <stdio.h>
 
 #ifdef __checkcbox
@@ -52,28 +56,11 @@ int t_setvbuf(_TPtr<FILE> restrict stream,
               _TArray_ptr<char> restrict buf : count(size),
             int mode, size_t size);
 
-//
-// TODO: printing and scanning functions are still mostly
-// unchecked because of the use of varargs.
-// * There may not be enough arguments for the format string.
-// * Any pointer arguments may not meet the requirements of the
-//  format string.
-//
-
-// We wrap each definition in a complex conditional, there two boolean values:
-// - we are fortifying, or we're not (_FORTIFY_SOURCE==0 is not fortifying)
-// - there is or there isn't a macro hash-defining this symbol (defined(symbol))
-// Cases:
-// - Fortifying,     Macro Exists: this is expected, we don't need the definition
-// - Not Fortifying, Macro Exists: we need the definition, we need to undef macro
-// - Fortifying,     No Macro:     we need the definition
-// - Not Fortifying, No Macro:     we need the definition
-
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_fprintf)
 #undef t_fprintf
 _Unchecked
-int t_fprintf(_TPtr<FILE> restrict stream,
+int t_fprintf(FILE * restrict stream : itype(restrict _TPtr<FILE>),
               _TNt_array_ptr<const char> restrict format, ...);
 #endif
 
@@ -84,7 +71,7 @@ int t_fscanf(_TPtr<FILE> restrict stream,
 #if _FORTIFY_SOURCE == 0 || !defined(t_printf)
 #undef t_printf
 _Unchecked
-int t_printf(_TNt_array_ptr<const char> restrict format, ...);
+int t_printf(const char * restrict format : itype(restrict _Nt_array_ptr<const char>), ...);
 #endif
 
 int t_scanf(_TNt_array_ptr<const char> restrict format);
