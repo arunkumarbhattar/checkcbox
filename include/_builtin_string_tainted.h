@@ -20,40 +20,40 @@
 #endif
 
 #if __has_builtin(__builtin___memcpy_chkcbx) || defined(__GNUC__)
-_Itype_for_any(T) _TArray_ptr<T> __t_builtin___memcpy_chk(_TArray_ptr<T> restrict dest : byte_count(n),
+_TLIB _Itype_for_any(T) _TArray_ptr<T> __t_builtin___memcpy_chk(_TArray_ptr<T> restrict dest : byte_count(n),
                                                           _TArray_ptr<const T> restrict src : byte_count(n),
                              size_t n,
                              size_t obj_size) : byte_count(n);
 #endif
 
 #if __has_builtin(__builtin___memmove_chkcbx) || defined(__GNUC__)
-_Itype_for_any(T) _TArray_ptr<T> __t_builtin___memmove_chk(_TArray_ptr<T> restrict dest : byte_count(n),
+_TLIB _Itype_for_any(T) _TArray_ptr<T> __t_builtin___memmove_chk(_TArray_ptr<T> restrict dest : byte_count(n),
                                                              _TArray_ptr<const T> restrict src : byte_count(n),
                              size_t n,
                              size_t obj_size) : byte_count(n);
 #endif
 
 #if __has_builtin(__builtin___memset_chkcbx) || defined(__GNUC__)
-_Itype_for_any(T) _TArray_ptr<T> __t_builtin___memset_chk(_TArray_ptr<T> s : byte_count(n),
+_TLIB _Itype_for_any(T) _TArray_ptr<T> __t_builtin___memset_chk(_TArray_ptr<T> s : byte_count(n),
                             int c,
                             size_t n,
                             size_t obj_size) : byte_count(n);
 #endif
 
 #if __has_builtin(__builtin___strcat_chkcbx) || defined(__GNUC__)
-_TArray_ptr<char> __t_builtin___strcat_chk(_TNt_array_ptr<char> restrict dest,
+_TLIB _TArray_ptr<char> __t_builtin___strcat_chk(_TNt_array_ptr<char> restrict dest,
                                            _Nt_array_ptr<const char> restrict src,
                              size_t obj_size);
 #endif
 
 #if __has_builtin(__builtin___strcpy_chk) || defined(__GNUC__)
-_TArray_ptr<char> __t_builtin___strcpy_chk(_TNt_array_ptr<char> restrict dest,
+_TLIB _TArray_ptr<char> __t_builtin___strcpy_chk(_TNt_array_ptr<char> restrict dest,
                                            _Nt_array_ptr<const char> restrict src,
                              size_t obj_size);
 #endif
 
 #if __has_builtin(__builtin___strncat_chk) || defined(__GNUC__)
-_TArray_ptr<char> __t_builtin___strncat_chk(_TNt_array_ptr<char> restrict dest,
+_TLIB _TArray_ptr<char> __t_builtin___strncat_chk(_TNt_array_ptr<char> restrict dest,
                                             _Nt_array_ptr<const char> restrict src
                                             : count(n),
                               size_t n,
@@ -61,7 +61,7 @@ _TArray_ptr<char> __t_builtin___strncat_chk(_TNt_array_ptr<char> restrict dest,
 #endif
 
 #if __has_builtin(__builtin___strncpy_chk) || defined(__GNUC__)
-char *__t_builtin___strncpy_chk(_TNt_array_ptr<char> restrict dest : count(n),
+_TLIB char *__t_builtin___strncpy_chk(_TNt_array_ptr<char> restrict dest : count(n),
                                   _TNt_array_ptr<char> restrict src : count(n),
                               size_t n,
                               size_t obj_size) : count(n);

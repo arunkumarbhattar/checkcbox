@@ -19,12 +19,12 @@
 #pragma CHECKED_SCOPE push
 #pragma CHECKED_SCOPE on
 
-int t_fesetexceptflag(_TPtr<const fexcept_t> flagp,
+_TLIB int t_fesetexceptflag(_TPtr<const fexcept_t> flagp,
                     int excepts);
-int t_fegetenv(_TPtr<fenv_t> envp);
-int t_feholdexcept(_TPtr<fenv_t> envp);
-int t_fesetenv(_TPtr<const fenv_t> envp);
-int t_feupdateenv(_TPtr<const fenv_t> envp);
+_TLIB int t_fegetenv(_TPtr<fenv_t> envp);
+_TLIB int t_feholdexcept(_TPtr<fenv_t> envp);
+_TLIB int t_fesetenv(_TPtr<const fenv_t> envp);
+_TLIB int t_feupdateenv(_TPtr<const fenv_t> envp);
 
 #pragma CHECKED_SCOPE pop
 

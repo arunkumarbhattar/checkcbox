@@ -24,19 +24,19 @@
 #pragma CHECKED_SCOPE push
 #pragma CHECKED_SCOPE on
 
-intmax_t t_strtoimax(_TNt_array_ptr<const char> restrict nptr,
+_TLIB intmax_t t_strtoimax(_TNt_array_ptr<const char> restrict nptr,
                      _TPtr<_TNt_array_ptr<char>>restrict endptr,
                    int base);
 
-uintmax_t t_strtoumax( _TNt_array_ptr<const char> restrict nptr,
+_TLIB uintmax_t t_strtoumax( _TNt_array_ptr<const char> restrict nptr,
                       _TPtr<_TNt_array_ptr<char >> restrict endptr,
                     int base);
 
-intmax_t t_wcstoimax(_TNt_array_ptr<const wchar_t> restrict nptr,
+_TLIB intmax_t t_wcstoimax(_TNt_array_ptr<const wchar_t> restrict nptr,
                      _TPtr<_TNt_array_ptr<wchar_t>> restrict endptr,
                    int base);
 
-uintmax_t t_wcstoumax(_TNt_array_ptr<const wchar_t> restrict nptr,
+_TLIB uintmax_t t_wcstoumax(_TNt_array_ptr<const wchar_t> restrict nptr,
                     _TPtr<_TNt_array_ptr<wchar_t>> restrict endptr,
                     int base);
 

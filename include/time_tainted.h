@@ -24,20 +24,20 @@
 #pragma CHECKED_SCOPE push
 #pragma CHECKED_SCOPE on
 
-time_t t_mktime(_TPtr<struct tm> timeptr);
+_TLIB time_t t_mktime(_TPtr<struct tm> timeptr);
 
-int t_timespec_get(_TPtr<struct timespec> ts,
+_TLIB int t_timespec_get(_TPtr<struct timespec> ts,
                  int base);
 
-_Nt_array_ptr<char> t_asctime(_TPtr<const struct tm> timeptr);
+_TLIB _Nt_array_ptr<char> t_asctime(_TPtr<const struct tm> timeptr);
 
-_Nt_array_ptr<char> t_ctime(_TPtr<const time_t> timer);
+_TLIB _Nt_array_ptr<char> t_ctime(_TPtr<const time_t> timer);
 
-_TPtr<struct tm> t_gmtime(_TPtr<const time_t> timer);
+_TLIB _TPtr<struct tm> t_gmtime(_TPtr<const time_t> timer);
 
-_TPtr<struct tm> t_localtime(_TPtr<const time_t> timer);
+_TLIB _TPtr<struct tm> t_localtime(_TPtr<const time_t> timer);
 
-size_t t_strftime(_TArray_ptr<char> restrict output : count(maxsize),
+_TLIB size_t t_strftime(_TArray_ptr<char> restrict output : count(maxsize),
                 size_t maxsize,
                   _TNt_array_ptr<const char> restrict format,
                   _TPtr<const struct tm> restrict timeptr);

@@ -10,7 +10,8 @@
 #pragma CHECKED_SCOPE push
 #pragma CHECKED_SCOPE off
 #endif
-
+#pragma TLIB_SCOPE push
+#pragma TLIB_SCOPE on
 #include_next <math.h>
 
 #ifdef __checkedc
@@ -41,6 +42,7 @@ double nan(const char *t : itype(_Nt_array_ptr<const char>));
 float nanf(const char *t : itype(_Nt_array_ptr<const char>));
 long double nanl(const char *t : itype(_Nt_array_ptr<const char>));
 
+#pragma TLIB_SCOPE pop
 #pragma CHECKED_SCOPE pop
 
 #endif // guard

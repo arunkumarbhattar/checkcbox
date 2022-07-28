@@ -14,8 +14,12 @@
 #ifndef __ERRNO_TAINTED_H
 #define __ERRNO_TAINTED_H
 
-#pragma CHECKED_SCOPE push
 #pragma CHECKED_SCOPE on
+
+#pragma TLIB_SCOPE push
+#pragma TLIB_SCOPE on
+
+# define _t_errno (*__t_errno_location ())
 
 #if defined(_WIN32) || defined(_WIN64)
 __declspec(dllimport) _TPtr<int> __cdecl _t_errno(void);
@@ -25,6 +29,7 @@ extern _TPtr<int> __t_errno_location(void);
 extern _TPtr<int> __t_errno_location(void)  __THROW __attribute_const__;
 #endif
 
+#pragma TLIB_SCOPE pop
 #pragma CHECKED_SCOPE pop
 
 #endif // guards

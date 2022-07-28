@@ -43,38 +43,38 @@ struct timespec;
 #pragma CHECKED_SCOPE push
 #pragma CHECKED_SCOPE on
 
-void t_call_once(_TPtr<once_flag> flag,
+_TLIB void t_call_once(_TPtr<once_flag> flag,
                _TPtr<void (void)>fn);
 
-int t_cnd_broadcast(_TPtr<cnd_t> condition);
-void t_cnd_destroy(_TPtr<cnd_t> condition);
-void t_cnd_init(_TPtr<cnd_t> condition);
-int t_cnd_signal(_TPtr<cnd_t> condition);
-int t_cnd_timedwait(_TPtr<cnd_t> restrict cond,
+_TLIB int t_cnd_broadcast(_TPtr<cnd_t> condition);
+_TLIB void t_cnd_destroy(_TPtr<cnd_t> condition);
+_TLIB void t_cnd_init(_TPtr<cnd_t> condition);
+_TLIB int t_cnd_signal(_TPtr<cnd_t> condition);
+_TLIB int t_cnd_timedwait(_TPtr<cnd_t> restrict cond,
                   _TPtr<mtx_t> restrict mutex,
                   _TPtr<const struct timespec> restrict spec);
-int t_cnd_wait(_TPtr<cnd_t> condition,
+_TLIB int t_cnd_wait(_TPtr<cnd_t> condition,
              _TPtr<mtx_t> mutex);
-void t_mtx_destroy(_TPtr<mtx_t> mutex);
-int t_mtx_init(_TPtr<mtx_t> mutex, int type);
-int t_mtx_lock(_TPtr<mtx_t> mutex);
-int t_mtx_timedlock(_TPtr<mtx_t> restrict mutex,
+_TLIB void t_mtx_destroy(_TPtr<mtx_t> mutex);
+_TLIB int t_mtx_init(_TPtr<mtx_t> mutex, int type);
+_TLIB int t_mtx_lock(_TPtr<mtx_t> mutex);
+_TLIB int t_mtx_timedlock(_TPtr<mtx_t> restrict mutex,
                   _TPtr<const struct timespec> restrict ts);
-int t_mtx_trylock(_TPtr<mtx_t> mtex);
-int t_mtx_unlock(_TPtr<mtx_t> mtex);
+_TLIB int t_mtx_trylock(_TPtr<mtx_t> mtex);
+_TLIB int t_mtx_unlock(_TPtr<mtx_t> mtex);
 
-int t_thrd_create(_TPtr<thrd_t> thr,
+_TLIB int t_thrd_create(_TPtr<thrd_t> thr,
                 _TPtr<int (_TPtr<void>)> func,
                 _TPtr<void> arg);
 
-int t_thrd_join(thrd_t thr, _TPtr<int> res);
-int t_thrd_sleep(_TPtr<const struct timespec> duration,
+_TLIB int t_thrd_join(thrd_t thr, _TPtr<int> res);
+_TLIB int t_thrd_sleep(_TPtr<const struct timespec> duration,
                _TPtr<struct timespec> remaining);
-int t_tss_create(_TPtr<tss_t> key,
+_TLIB int t_tss_create(_TPtr<tss_t> key,
                _TPtr<void (_TPtr<void>)> dtor);
 
-_TPtr<void> t_tss_get(tss_t key);
-int t_tss_set(tss_t key, _TPtr<void> value);
+_TLIB _TPtr<void> t_tss_get(tss_t key);
+_TLIB int t_tss_set(tss_t key, _TPtr<void> value);
 
 #pragma CHECKED_SCOPE pop
 
