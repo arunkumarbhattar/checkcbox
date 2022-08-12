@@ -15,15 +15,6 @@
 #pragma TLIB_SCOPE on
 
 #include <stddef.h>
-_Mirror static void* c_malloc(size_t size);
-_Mirror static void* c_realloc(_TArray_ptr<void> pointer, size_t size);
-_Mirror static void c_free(_TArray_ptr<void>pointer);
-_Mirror static int c_isTaintedPointerToTaintedMem(_TArray_ptr<void> pointer);
-_Mirror static int c_isPointerToTaintedMem(void* pointer);
-_Mirror static void* c_fetch_sandbox_address();
-_Mirror static unsigned int c_fetch_pointer_offset(_TArray_ptr<void> pointer_name);
-_Mirror static unsigned int c_fetch_pointer_from_offset(unsigned long pointer_offset);
-_Mirror static unsigned long c_fetch_sandbox_heap_address();
 
 // TODO: express alignment constraints once where clauses have been added.
 _Itype_for_any(T) _TArray_ptr<T> t_malloc(size_t size);
