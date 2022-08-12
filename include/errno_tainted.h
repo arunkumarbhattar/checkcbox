@@ -11,11 +11,15 @@
 #include_next <errno.h>
 
 #ifdef __checkcbox
+#pragma CHECKED_SCOPE pop
+#endif
+
+#ifdef __checkcbox
 #ifndef __ERRNO_TAINTED_H
 #define __ERRNO_TAINTED_H
 
+#pragma CHECKED_SCOPE push
 #pragma CHECKED_SCOPE on
-
 #pragma TLIB_SCOPE push
 #pragma TLIB_SCOPE on
 

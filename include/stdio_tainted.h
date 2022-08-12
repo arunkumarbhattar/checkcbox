@@ -51,10 +51,10 @@ _TLIB int t_rename(_TNt_array_ptr<const char> from,
            _TNt_array_ptr<const char> to);
 //_TLIB _TPtr<FILE> t_tmpfile(void);
 _TLIB _TNt_array_ptr<char> t_tmpnam(_TNt_array_ptr<char> source);
-//_TLIB int t_fclose(_TPtr<FILE> stream);
+_TLIB int t_fclose(_TPtr<void> stream);
 //_TLIB int t_fflush(_TPtr<FILE> stream);
-//_TLIB _Ptr<FILE> t_fopen(_TNt_array_ptr<const char> restrict filename,
-//            const char* restrict mode : itype(restrict _TNt_array_ptr<const char>));
+_TLIB _TPtr<void> t_fopen(_TNt_array_ptr<const char> restrict filename,
+            const char* restrict mode : itype(restrict _TNt_array_ptr<const char>));
 //_TLIB _Ptr<FILE> t_freopen(_TNt_array_ptr<const char> restrict filename,
 //              _TNt_array_ptr<const char> restrict mode,
 //              _Ptr<FILE> restrict stream);
@@ -162,9 +162,9 @@ int t_vsscanf(_TNt_array_ptr<const char> restrict s,
 //_TLIB int t_puts(_TNt_array_ptr<const char>str);
 //_TLIB int t_ungetc(int c, _TPtr<FILE> stream);
 //
-//_TLIB _Itype_for_any(T) size_t t_fread(_TArray_ptr<T> restrict pointer : byte_count(size * nmemb),
-//             size_t size, size_t nmemb,
-//             _TPtr<FILE> restrict stream);
+_TLIB _Itype_for_any(T) size_t t_fread(_TArray_ptr<T> restrict pointer : byte_count(size * nmemb),
+             size_t size, size_t nmemb,
+             _TPtr<void> restrict stream);
 //
 //_TLIB _Itype_for_any(T) size_t t_fwrite(_TArray_ptr<T> restrict pointer : byte_count(size * nmemb),
 //              size_t size, size_t nmemb,
@@ -173,16 +173,16 @@ int t_vsscanf(_TNt_array_ptr<const char> restrict s,
 //_TLIB int t_fgetpos(_TPtr<FILE> restrict stream,
 //              _TPtr<fpos_t> restrict pos);
 //
-//_TLIB int t_fseek(_TPtr<FILE> stream, long int offset, int whence);
+_TLIB int t_fseek(_TPtr<void> stream, long int offset, int whence);
 //_TLIB int t_fsetpos(_TPtr<FILE> stream,
 //              _TPtr<const fpos_t> pos);
 //
-//_TLIB long int t_ftell(_TPtr<FILE> stream);
-//_TLIB void t_rewind(_TPtr<FILE> stream);
+_TLIB long int t_ftell(_TPtr<void> stream);
+_TLIB void t_rewind(_TPtr<void> stream);
 //
 //_TLIB void t_clearerr(_TPtr<FILE> stream);
 //_TLIB int t_feof(_TPtr<FILE> stream);
-//_TLIB int t_ferror(_TPtr<FILE> stream);
+_TLIB int t_ferror(_TPtr<void> stream);
 //_TLIB void t_perror(_TNt_array_ptr<const char>s);
 
 #include "_builtin_stdio_checked.h"
