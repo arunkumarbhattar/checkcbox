@@ -17,7 +17,7 @@
 #pragma TLIB_SCOPE on
 int c_isPointerToTaintedMem(void* pointer);
 
-void* c_fetch_pointer_from_offset(const unsigned long pointer_offset);
+void* c_fetch_pointer_from_offset(const unsigned int pointer_offset);
 
 int c_isTaintedPointerToTaintedMem(void* pointer);
 
