@@ -83,8 +83,14 @@ _Itype_for_any(T) _TArray_ptr<T> t_memset(_TArray_ptr<T> dest : byte_count(n),
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_strcpy)
 #undef t_strcpy
-_TArray_ptr<char> t_strcpy(_TArray_ptr<char> restrict dest,
+_TArray_ptr<char> t_strcpy(char* restrict dest :itype(restrict _TArray_ptr<char>),
                            const char* restrict src : itype(restrict _TArray_ptr<const char>));
+#endif
+
+#if _FORTIFY_SOURCE == 0 || !defined(tc_strcpy)
+#undef tc_strcpy
+_TArray_ptr<char> tc_strcpy(_TNt_array_ptr<char> restrict dest :itype(restrict _Nt_array_ptr<char> ),
+                              _Nt_array_ptr<const char> restrict src : itype(restrict _TNt_array_ptr<const char>));
 #endif
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_strncpy)
