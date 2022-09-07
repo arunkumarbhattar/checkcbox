@@ -87,6 +87,11 @@ _TArray_ptr<char> t_strcpy(char* restrict dest :itype(restrict _TArray_ptr<char>
                            const char* restrict src : itype(restrict _TArray_ptr<const char>));
 #endif
 
+#if _FORTIFY_SOURCE == 0 || !defined(tc_strcpy)
+#undef tc_strcpy
+_TArray_ptr<char> tc_strcpy(_TNt_array_ptr<char> restrict dest :itype(restrict _Nt_array_ptr<char> ),
+                              _Nt_array_ptr<const char> restrict src : itype(restrict _TNt_array_ptr<const char>));
+#endif
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_strncpy)
 #undef t_strncpy
