@@ -19,6 +19,8 @@ int c_isPointerToTaintedMem(void* pointer);
 
 void* c_fetch_pointer_from_offset(const unsigned int pointer_offset);
 
+void* c_ConditionalTaintedOff2Ptr(const unsigned long pointer_offset);
+
 int c_isTaintedPointerToTaintedMem(void* pointer);
 
 void* c_fetch_sandbox_address();
