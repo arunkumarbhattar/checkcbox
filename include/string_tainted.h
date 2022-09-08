@@ -48,6 +48,8 @@
 #undef t_strpbrk
 #undef t_strspn
 #undef t_strdup
+#undef tc_strcpy
+#undef ct_strcpy
 #endif
 
 // We wrap each definition in a complex conditional, there two boolean values:
@@ -91,6 +93,12 @@ _TArray_ptr<char> t_strcpy(char* restrict dest :itype(restrict _TArray_ptr<char>
 #undef tc_strcpy
 _TArray_ptr<char> tc_strcpy(_TNt_array_ptr<char> restrict dest :itype(restrict _Nt_array_ptr<char> ),
                               _Nt_array_ptr<const char> restrict src : itype(restrict _TNt_array_ptr<const char>));
+#endif
+
+#if _FORTIFY_SOURCE == 0 || !defined(ct_strcpy)
+#undef ct_strcpy
+_TArray_ptr<char> ct_strcpy(_Nt_array_ptr<char> restrict dest,
+                              _TNt_array_ptr<const char> restrict src);
 #endif
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_strncpy)
