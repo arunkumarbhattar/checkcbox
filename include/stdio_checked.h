@@ -40,20 +40,20 @@ extern FILE *stderr : itype(_Ptr<FILE>);
 int remove(const char *name : itype(_Nt_array_ptr<const char>));
 int rename(const char *from : itype(_Nt_array_ptr<const char>),
            const char *to : itype(_Nt_array_ptr<const char>));
-_TLIB FILE *tmpfile(void) : itype(_Ptr<FILE>);
+FILE *tmpfile(void) : itype(_Ptr<FILE>);
 char *tmpnam(char *source : itype(_Nt_array_ptr<char>)) : itype(_Nt_array_ptr<char>);
-_TLIB int fclose(FILE *stream : itype(_Ptr<FILE>));
-_TLIB int fflush(FILE *stream : itype(_Ptr<FILE>));
-_TLIB FILE *fopen(const char * restrict filename : itype(restrict _Nt_array_ptr<const char>),
+int fclose(FILE *stream : itype(_Ptr<FILE>));
+int fflush(FILE *stream : itype(_Ptr<FILE>));
+FILE *fopen(const char * restrict filename : itype(restrict _Nt_array_ptr<const char>),
             const char * restrict mode : itype(restrict _Nt_array_ptr<const char>)) : itype(_Ptr<FILE>);
-_TLIB FILE *freopen(const char * restrict filename : itype(restrict _Nt_array_ptr<const char>),
+FILE *freopen(const char * restrict filename : itype(restrict _Nt_array_ptr<const char>),
               const char * restrict mode : itype(restrict _Nt_array_ptr<const char>),
               FILE * restrict stream : itype(restrict _Ptr<FILE>)) :
   itype(_Ptr<FILE>);
 
-_TLIB void setbuf(FILE * restrict stream : itype(restrict _Ptr<FILE>),
+void setbuf(FILE * restrict stream : itype(restrict _Ptr<FILE>),
             char * restrict buf : count(BUFSIZ));
-_TLIB int setvbuf(FILE * restrict stream : itype(restrict _Ptr<FILE>),
+int setvbuf(FILE * restrict stream : itype(restrict _Ptr<FILE>),
             char * restrict buf : count(size),
             int mode, size_t size);
 
@@ -77,12 +77,12 @@ _TLIB int setvbuf(FILE * restrict stream : itype(restrict _Ptr<FILE>),
 
 #if _FORTIFY_SOURCE == 0 || !defined(fprintf)
 #undef fprintf
-_TLIB _Unchecked
+_Unchecked
 int fprintf(FILE * restrict stream : itype(restrict _Ptr<FILE>),
             const char * restrict format : itype(restrict _Nt_array_ptr<const char>), ...);
 #endif
 
-_TLIB _Unchecked
+_Unchecked
 int fscanf(FILE * restrict stream : itype(restrict _Ptr<FILE>),
            const char * restrict format : itype(restrict _Nt_array_ptr<const char>), ...);
 
@@ -123,13 +123,13 @@ int snprintf(char * restrict s : itype(restrict _Nt_array_ptr<char>) count(n-1),
 
 #if _FORTIFY_SOURCE == 0 || !defined(vfprintf)
 #undef vfprintf
-_TLIB _Unchecked
+ _Unchecked
 int vfprintf(FILE * restrict stream : itype(restrict _Ptr<FILE>),
              const char * restrict format : itype(restrict _Nt_array_ptr<const char>),
              va_list arg);
 #endif
 
-_TLIB _Unchecked
+ _Unchecked
 int vfscanf(FILE * restrict stream : itype(restrict _Ptr<FILE>),
             const char * restrict format : itype(restrict _Nt_array_ptr<const char>),
             va_list arg);
@@ -167,39 +167,39 @@ int vsscanf(const char * restrict s : itype(restrict _Nt_array_ptr<const char>),
             const char * restrict format : itype(restrict _Nt_array_ptr<const char>),
             va_list arg);
 
-_TLIB int fgetc(FILE *stream : itype(_Ptr<FILE>));
-_TLIB int fputc(int c, FILE *stream : itype(_Ptr<FILE>));
-_TLIB char *fgets(char * restrict s : count(n), int n,
+ int fgetc(FILE *stream : itype(_Ptr<FILE>));
+ int fputc(int c, FILE *stream : itype(_Ptr<FILE>));
+ char *fgets(char * restrict s : count(n), int n,
             FILE * restrict stream : itype(restrict _Ptr<FILE>)) :
   bounds(s, s + n);
-_TLIB int fputs(const char * restrict s : itype(restrict _Nt_array_ptr<const char>),
+ int fputs(const char * restrict s : itype(restrict _Nt_array_ptr<const char>),
           FILE * restrict stream : itype(restrict _Ptr<FILE>));
-_TLIB int getc(FILE *stream : itype(_Ptr<FILE>));
-_TLIB int putc(int c, FILE *stream : itype(_Ptr<FILE>));
-_TLIB int puts(const char *str : itype(_Nt_array_ptr<const char>));
-_TLIB int ungetc(int c, FILE *stream : itype(_Ptr<FILE>));
+ int getc(FILE *stream : itype(_Ptr<FILE>));
+ int putc(int c, FILE *stream : itype(_Ptr<FILE>));
+ int puts(const char *str : itype(_Nt_array_ptr<const char>));
+ int ungetc(int c, FILE *stream : itype(_Ptr<FILE>));
 
-_TLIB size_t fread(void * restrict pointer : byte_count(size * nmemb),
+ size_t fread(void * restrict pointer : byte_count(size * nmemb),
              size_t size, size_t nmemb,
              FILE * restrict stream : itype(restrict _Ptr<FILE>));
 
-_TLIB size_t fwrite(const void * restrict pointer : byte_count(size * nmemb),
+ size_t fwrite(const void * restrict pointer : byte_count(size * nmemb),
               size_t size, size_t nmemb,
               FILE * restrict stream : itype(restrict _Ptr<FILE>));
 
-_TLIB int fgetpos(FILE * restrict stream : itype(restrict _Ptr<FILE>),
+ int fgetpos(FILE * restrict stream : itype(restrict _Ptr<FILE>),
             fpos_t * restrict pos : itype(restrict _Ptr<fpos_t>));
 
-_TLIB int fseek(FILE *stream : itype(_Ptr<FILE>), long int offset, int whence);
-_TLIB int fsetpos(FILE *stream : itype(_Ptr<FILE>),
+ int fseek(FILE *stream : itype(_Ptr<FILE>), long int offset, int whence);
+ int fsetpos(FILE *stream : itype(_Ptr<FILE>),
             const fpos_t *pos :  itype(_Ptr<const fpos_t>));
 
-_TLIB long int ftell(FILE *stream : itype(_Ptr<FILE>));
-_TLIB void rewind(FILE *stream : itype(_Ptr<FILE>));
+ long int ftell(FILE *stream : itype(_Ptr<FILE>));
+ void rewind(FILE *stream : itype(_Ptr<FILE>));
 
-_TLIB void clearerr(FILE *stream : itype(_Ptr<FILE>));
-_TLIB int feof(FILE *stream : itype(_Ptr<FILE>));
-_TLIB int ferror(FILE *stream : itype(_Ptr<FILE>));
+ void clearerr(FILE *stream : itype(_Ptr<FILE>));
+ int feof(FILE *stream : itype(_Ptr<FILE>));
+ int ferror(FILE *stream : itype(_Ptr<FILE>));
 void perror(const char *s : itype(_Nt_array_ptr<const char>));
 
 #include "_builtin_stdio_checked.h"
