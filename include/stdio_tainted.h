@@ -83,7 +83,8 @@ _TLIB _Unchecked
 int t_printf(const char * restrict format : itype(restrict _TNt_array_ptr<const char>), ...);
 #endif
 
-_TLIB int t_scanf(_TNt_array_ptr<const char> restrict format);
+_TLIB
+_Unchecked int t_scanf(const char * restrict format : itype (restrict _TNt_array_ptr<const char>), ...);
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_sprintf)
 #undef t_sprintf
