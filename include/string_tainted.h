@@ -50,6 +50,10 @@
 #undef t_strdup
 #undef tc_strcpy
 #undef ct_strcpy
+#undef t_strcpy
+#undef t_strcat
+#undef t_strncat
+#undef t_strncpy
 #endif
 
 // We wrap each definition in a complex conditional, there two boolean values:
@@ -65,27 +69,27 @@
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_memcpy)
 #undef t_memcpy
-_Itype_for_any(T) _TArray_ptr<T> t_memcpy(_TArray_ptr<T> restrict dest : byte_count(n),_TArray_ptr<const T> restrict src : byte_count(n),
-                                            size_t n) : byte_count(n) ;
+_Itype_for_any(T) _TPtr<T> t_memcpy(void* dest : itype(_TPtr<T>),void* src : itype(_TPtr<const T>),
+                                            size_t n) ;
 #endif
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_memmove)
 #undef t_memmove
-_Itype_for_any(T) _TPtr<T> t_memmove(_TPtr<T> dest,
-                                           _TPtr<const T> src,
+_Itype_for_any(T) _TPtr<T> t_memmove(void* dest : itype(_TPtr<T>),
+                                           const void* src : itype(_TPtr<const T>),
                                              size_t n);
 #endif
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_memset)
 #undef t_memset
-_Itype_for_any(T) _TArray_ptr<T> t_memset(_TArray_ptr<T> dest : byte_count(n),
+_Itype_for_any(T) _TArray_ptr<T> t_memset(_TPtr<T> dest,
                                             int c,
                                             size_t n) : byte_count(n);
 #endif
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_strcpy)
 #undef t_strcpy
-_TArray_ptr<char> t_strcpy(char* restrict dest :itype(restrict _TPtr<char>),
+_TLIB _TPtr<char> t_strcpy(char* restrict dest :itype(restrict _TPtr<char>),
                            const char* restrict src : itype(restrict _TPtr<const char>));
 #endif
 
@@ -121,13 +125,13 @@ _TArray_ptr<char> t_strncat(_TArray_ptr<char> restrict dest,
                               size_t n);
 #endif
 
-_Itype_for_any(T) int t_memcmp(_TArray_ptr<const T> src1 : byte_count(n), _TArray_ptr<const T> src2 : byte_count(n),
+_Itype_for_any(T) int t_memcmp(_TPtr<const T> src1, _TPtr<const T> src2 ,
                                  size_t n);
 
-int t_strcmp(const char *src1 : itype(_TPtr<const char>),
+_TLIB int t_strcmp(const char *src1 : itype(_TPtr<const char>),
              const char *src2 : itype(_TPtr<const char>));
 
-int t_strcoll(_TNt_array_ptr<const char> src1,
+_TLIB int t_strcoll(_TNt_array_ptr<const char> src1,
               _TNt_array_ptr<const  char> src2);
 
 // strncmp takes possibly null-terminated strings as arguments and checks
