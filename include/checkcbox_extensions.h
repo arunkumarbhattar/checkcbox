@@ -54,6 +54,14 @@ t_snprintf_array_ptr( _TArray_ptr<char> restrict s : count(n),
                        size_t n,
                        _TNt_array_ptr<const char> restrict format,
                        ...);
+_TLIB static _TNt_array_ptr<char> string_tainted_malloc(size_t sz) : count(sz) _Unchecked{
+  if(sz >= SIZE_MAX)
+    return NULL;
+  _TArray_ptr<char> p : count(sz+1) = (_TArray_ptr<char>)t_malloc(sz + 1);
+  if (p != NULL)
+    p[sz] = 0;
+  return _Tainted_Assume_bounds_cast<_TNt_array_ptr<char>>(p, count(sz));
+}
 
 _TLIB static _Ptr<char> StrMalloc(size_t sz)
      _Unchecked {
@@ -86,18 +94,22 @@ _TLIB _Unchecked
   return GlobalTaintedAdaptorStr;
 }
 
+_TLIB _Unchecked
+    static _TPtr<char>
+    StaticUncheckedToTStrAdaptor(char* Ip )
+{
+  int Iplen = strlen(Ip);
+  printf("Ip is %s", Ip);
+  printf("Iplen is %d", Iplen);
+  GlobalTaintedAdaptorStr = string_tainted_malloc(Iplen);
+  t_strcpy(GlobalTaintedAdaptorStr, Ip);
+  return GlobalTaintedAdaptorStr;
+}
+
 _TLIB static _TNt_array_ptr<char> TNtStrMalloc(size_t sz) : count(sz) _Unchecked{
   if(sz >= SIZE_MAX)
     return NULL;
   _TArray_ptr<char> p : count(sz+1) = (_TArray_ptr<char>)t_malloc<char>(sz + 1);
-  if (p != NULL)
-    p[sz] = 0;
-  return _Tainted_Assume_bounds_cast<_TNt_array_ptr<char>>(p, count(sz));
-}
-_TLIB static _TNt_array_ptr<char> string_tainted_malloc(size_t sz) : count(sz) _Unchecked{
-  if(sz >= SIZE_MAX)
-    return NULL;
-  _TArray_ptr<char> p : count(sz+1) = (_TArray_ptr<char>)t_malloc(sz + 1);
   if (p != NULL)
     p[sz] = 0;
   return _Tainted_Assume_bounds_cast<_TNt_array_ptr<char>>(p, count(sz));
