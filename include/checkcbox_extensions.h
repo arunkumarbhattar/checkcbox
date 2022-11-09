@@ -124,7 +124,7 @@ _TLIB _Unchecked static _TPtr<char> CheckedToTaintedStrAdaptor(const char* Ip :
   return RetPtr;
 }
 
-static _Ptr<char> TaintedToCheckedStrAdaptor(_TPtr<char> Ip)
+_TLIB static _Ptr<char> TaintedToCheckedStrAdaptor(_TPtr<char> Ip)
 {
   int Iplen = t_strlen(Ip);
   _Ptr<char> RetPtr = (_Ptr<char>)malloc<char>(Iplen*sizeof(char));

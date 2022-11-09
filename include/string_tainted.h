@@ -69,7 +69,7 @@
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_memcpy)
 #undef t_memcpy
-_Itype_for_any(T) _TPtr<T> t_memcpy(void* dest : itype(_TPtr<T>),void* src : itype(_TPtr<const T>),
+_TLIB _Itype_for_any(T) _TPtr<T> t_memcpy(void* dest : itype(_TPtr<T>),void* src : itype(_TPtr<const T>),
                                             size_t n) ;
 #endif
 
@@ -79,6 +79,11 @@ _Itype_for_any(T) _TPtr<T> t_memmove(void* dest : itype(_TPtr<T>),
                                            const void* src : itype(_TPtr<const T>),
                                              size_t n);
 #endif
+
+_TLIB static int t_strncasecmp(const char *src : itype(_TPtr<const char>),
+                  const char *s2 : itype(_TPtr<const char>),
+                  size_t n){return strncasecmp(src,s2,n);};
+
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_memset)
 #undef t_memset
