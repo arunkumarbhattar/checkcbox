@@ -68,9 +68,9 @@ _TLIB int t_fclose(_TPtr<void> stream);
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_fprintf)
 #undef t_fprintf
-//_TLIB _Unchecked
-//int t_fprintf(FILE * restrict stream : itype(restrict _TPtr<FILE>),
-//              _TNt_array_ptr<const char> restrict format, ...);
+_TLIB _Unchecked
+int t_fprintf(FILE * restrict stream,
+              const char* format : itype(_TPtr<const char> ), ...);
 #endif
 
 //_TLIB _Unchecked

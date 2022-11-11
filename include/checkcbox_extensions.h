@@ -96,13 +96,11 @@ _TLIB _Unchecked
 
 _TLIB _Unchecked
     static _TPtr<char>
-    StaticUncheckedToTStrAdaptor(char* Ip )
+    StaticUncheckedToTStrAdaptor(char* Ip , size_t len)
 {
-  int Iplen = strlen(Ip);
-  printf("Ip is %s", Ip);
-  printf("Iplen is %d", Iplen);
+  int Iplen =  len;
   GlobalTaintedAdaptorStr = string_tainted_malloc(Iplen);
-  t_strcpy(GlobalTaintedAdaptorStr, Ip);
+  t_strncpy(c_fetch_pointer_from_offset((int)GlobalTaintedAdaptorStr), Ip, Iplen);
   return GlobalTaintedAdaptorStr;
 }
 
