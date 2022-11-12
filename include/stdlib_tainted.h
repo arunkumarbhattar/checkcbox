@@ -23,6 +23,7 @@ _Itype_for_any(T) void t_free(_TArray_ptr<T> pointer);
 
 _Itype_for_any(T) _TArray_ptr<T> t_realloc(_TArray_ptr<T> pointer, size_t size);
 
+_Itype_for_any(T) _TArray_ptr<T> t_calloc(size_t nmemb, size_t size);
 /* Convert a string to a floating-point number.  */
 extern double t_strtod (_TNt_array_ptr<char> __restrict __nptr,
                        _TPtr<_TPtr<char>>__restrict __endptr);
