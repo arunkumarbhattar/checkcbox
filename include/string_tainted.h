@@ -50,6 +50,10 @@
 #undef t_strdup
 #undef tc_strcpy
 #undef ct_strcpy
+#undef t_strcpy
+#undef t_strcat
+#undef t_strncat
+#undef t_strncpy
 #endif
 
 // We wrap each definition in a complex conditional, there two boolean values:
@@ -65,28 +69,28 @@
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_memcpy)
 #undef t_memcpy
-_Itype_for_any(T) _TArray_ptr<T> t_memcpy(_TArray_ptr<T> restrict dest : byte_count(n),_TArray_ptr<const T> restrict src : byte_count(n),
-                                            size_t n) : byte_count(n) ;
+_Itype_for_any(T) _TPtr<T> t_memcpy(void* dest : itype(_TPtr<T>),void* src : itype(_TPtr<const T>),
+                                            size_t n) ;
 #endif
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_memmove)
 #undef t_memmove
-_Itype_for_any(T) _TArray_ptr<T> t_memmove(_TArray_ptr<T> dest : byte_count(n),
-                                             _TArray_ptr<const T> src : byte_count(n),
-                                             size_t n) : byte_count(n);
+_Itype_for_any(T) _TPtr<T> t_memmove(void* dest : itype(_TPtr<T>),
+                                           const void* src : itype(_TPtr<const T>),
+                                             size_t n);
 #endif
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_memset)
 #undef t_memset
-_Itype_for_any(T) _TArray_ptr<T> t_memset(_TArray_ptr<T> dest : byte_count(n),
+_Itype_for_any(T) _TArray_ptr<T> t_memset(_TPtr<T> dest,
                                             int c,
                                             size_t n) : byte_count(n);
 #endif
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_strcpy)
 #undef t_strcpy
-_TArray_ptr<char> t_strcpy(char* restrict dest :itype(restrict _TArray_ptr<char>),
-                           const char* restrict src : itype(restrict _TArray_ptr<const char>));
+_TLIB _TPtr<char> t_strcpy(char* restrict dest :itype(restrict _TPtr<char>),
+                           const char* restrict src : itype(restrict _TPtr<const char>));
 #endif
 
 #if _FORTIFY_SOURCE == 0 || !defined(tc_strcpy)
@@ -103,8 +107,8 @@ _TArray_ptr<char> ct_strcpy(_Nt_array_ptr<char> restrict dest,
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_strncpy)
 #undef t_strncpy
-_TArray_ptr<char> t_strncpy(_TArray_ptr<char> dest : byte_count(n),
-                              const char* src : itype(_TArray_ptr<const char>) byte_count(n),
+_TArray_ptr<char> t_strncpy(char* dest : itype(_TPtr<char>),
+                              const char* src : itype(_TPtr<const char>),
                               size_t n) : count(n);
 #endif
 
@@ -121,13 +125,13 @@ _TArray_ptr<char> t_strncat(_TArray_ptr<char> restrict dest,
                               size_t n);
 #endif
 
-_Itype_for_any(T) int t_memcmp(_TArray_ptr<const T> src1 : byte_count(n), _TArray_ptr<const T> src2 : byte_count(n),
+_Itype_for_any(T) int t_memcmp(_TPtr<const T> src1, _TPtr<const T> src2 ,
                                  size_t n);
 
-int t_strcmp(const char *src1 : itype(_TNt_array_ptr<const char>),
-             const char *src2 : itype(_TNt_array_ptr<const char>));
+_TLIB int t_strcmp(const char *src1 : itype(_TPtr<const char>),
+             const char *src2 : itype(_TPtr<const char>));
 
-int t_strcoll(_TNt_array_ptr<const char> src1,
+_TLIB int t_strcoll(_TNt_array_ptr<const char> src1,
               _TNt_array_ptr<const  char> src2);
 
 // strncmp takes possibly null-terminated strings as arguments and checks
@@ -137,8 +141,8 @@ int t_strcoll(_TNt_array_ptr<const char> src1,
 // interface for null-terminated strings (assumed to be the most common case).
 // In the checkedc_extensions.h header there is a bounds-safe interface for
 // use of _TArray_ptr rather than _TNt_array_ptr.
-int t_strncmp(const char *src : itype(_TNt_array_ptr<const char>),
-                const char *s2 : itype(_TNt_array_ptr<const char>),
+int t_strncmp(const char *src : itype(_TPtr<const char>),
+                const char *s2 : itype(_TPtr<const char>),
               size_t n);
 
 size_t t_strxfrm(_TArray_ptr<char> restrict dest : count(n),
@@ -148,28 +152,28 @@ size_t t_strxfrm(_TArray_ptr<char> restrict dest : count(n),
 _Itype_for_any(T) _TArray_ptr<T> t_memchr(_TArray_ptr<T> s : byte_count(n), int c, size_t n) :
                                                                               byte_count(n);
 
-_TNt_array_ptr<char> t_strchr(_TNt_array_ptr<const char> s, int c);
+_TPtr<char> t_strchr(_TPtr<const char> s, int c);
 
 size_t t_strcspn(_TNt_array_ptr<const char> s1,
                _TNt_array_ptr<const char> s2);
 
-_TNt_array_ptr<char> t_strpbrk(_TNt_array_ptr<const char> s1,
-                               _TNt_array_ptr<const char> s2);
+_TPtr<char> t_strpbrk(const char *s1 : itype(_TPtr<const char>),
+                        const char *s2 : itype(_TPtr<const char>));
 
-_TNt_array_ptr<char> t_strrchr(_TNt_array_ptr<const char> s, int c);
-size_t t_strspn(_TNt_array_ptr<const char> s1,
-                _TNt_array_ptr<const char> s2);
+_TPtr<char> t_strrchr(_TPtr<const char> s, int c);
+size_t t_strspn(const char *s1 : itype(_TPtr<const char>),
+                                        const char *s2 : itype(_TPtr<const char>));
 
-_TNt_array_ptr<char> t_strstr(_TNt_array_ptr<const char>s1,
-                              _TNt_array_ptr<const char> s2);
-_TNt_array_ptr<char> t_strtok(_TNt_array_ptr<char> restrict s1,
-                              _TNt_array_ptr<const char> s2);
+_TPtr<char> t_strstr(const char *s1 : itype(_TPtr<const char>),
+                              const char *s2 : itype(_TPtr<const char>));
+_TPtr<char> t_strtok(const char  * restrict s1 : itype(_TPtr<const char> restrict),
+                              const char  * restrict s2 : itype(_TPtr<const char> restrict));
 
 _TNt_array_ptr<char> t_strerror(int errnum);
 
-size_t t_strlen(_TNt_array_ptr<const char> s);
+size_t t_strlen(_TPtr<const char> s);
 
-_TNt_array_ptr<char> t_strdup(_TNt_array_ptr<const char> s);
+_TNt_array_ptr<char> t_strdup(_TPtr<const char> s);
 #pragma TLIB_SCOPE pop
 #include "_builtin_string_tainted.h"
 

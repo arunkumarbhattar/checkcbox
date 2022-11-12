@@ -50,11 +50,11 @@ _TLIB int t_remove(_TNt_array_ptr<const char> name);
 _TLIB int t_rename(_TNt_array_ptr<const char> from,
            _TNt_array_ptr<const char> to);
 //_TLIB _TPtr<FILE> t_tmpfile(void);
-_TLIB _TNt_array_ptr<char> t_tmpnam(_TNt_array_ptr<char> source);
+//_TLIB _TPtr<char> t_tmpnam(_TPtr<char> source);
 _TLIB int t_fclose(_TPtr<void> stream);
 //_TLIB int t_fflush(_TPtr<FILE> stream);
-_TLIB _TPtr<void> t_fopen(_TNt_array_ptr<const char> restrict filename,
-            const char* restrict mode : itype(restrict _TNt_array_ptr<const char>));
+//_TLIB _TPtr<void> t_fopen(_TNt_array_ptr<const char> restrict filename,
+//            const char* restrict mode : itype(restrict _TNt_array_ptr<const char>));
 //_TLIB _Ptr<FILE> t_freopen(_TNt_array_ptr<const char> restrict filename,
 //              _TNt_array_ptr<const char> restrict mode,
 //              _Ptr<FILE> restrict stream);
@@ -80,20 +80,21 @@ _TLIB _TPtr<void> t_fopen(_TNt_array_ptr<const char> restrict filename,
 #if _FORTIFY_SOURCE == 0 || !defined(t_printf)
 #undef t_printf
 _TLIB _Unchecked
-int t_printf(const char * restrict format : itype(restrict _TNt_array_ptr<const char>), ...);
+int t_printf(const char * restrict format : itype(restrict _TPtr<const char>), ...);
 #endif
 
-_TLIB int t_scanf(_TNt_array_ptr<const char> restrict format);
+_TLIB
+_Unchecked int t_scanf(const char * restrict format : itype (restrict _TPtr<const char>), ...);
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_sprintf)
 #undef t_sprintf
 _TLIB _Unchecked
 int t_sprintf(_TArray_ptr<char> restrict s,
-              const char* restrict format : itype(_TNt_array_ptr<const char> restrict), ...);
+              const char* restrict format : itype(_TPtr<const char> restrict), ...);
 #endif
 _TLIB _Unchecked
-int t_sscanf(_TNt_array_ptr<const char> restrict s,
-             _TNt_array_ptr<const char> restrict format, ...);
+int t_sscanf(_TPtr<const char> restrict s,
+             _TPtr<const char> restrict format, ...);
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_snprintf)
 #undef t_snprintf
@@ -105,7 +106,7 @@ int t_sscanf(_TNt_array_ptr<const char> restrict s,
 _TLIB _Unchecked
 int t_snprintf(_TNt_array_ptr<char> restrict s : count(n-1),
              size_t n _Where n > 0,
-             _TNt_array_ptr<const char> restrict format, ...);
+             _TPtr<const char> restrict format, ...);
 #endif
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_vfprintf)
@@ -123,18 +124,18 @@ int t_snprintf(_TNt_array_ptr<char> restrict s : count(n-1),
 #if _FORTIFY_SOURCE == 0 || !defined(t_vprintf)
 #undef t_vprintf
 _TLIB _Unchecked
-int t_vprintf(_TNt_array_ptr<const char> restrict format,
+int t_vprintf(_TPtr<const char> restrict format,
              va_list arg);
 #endif
 _TLIB _Unchecked
-int t_vscanf(_TNt_array_ptr<const char> restrict format,
+int t_vscanf(_TPtr<const char> restrict format,
             va_list arg);
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_vsnprintf)
 #undef t_vsnprintf
 _TLIB _Unchecked
-int t_vsnprintf(_TNt_array_ptr<char> restrict s : count(n), size_t n,
-                _TNt_array_ptr<char> restrict format,
+int t_vsnprintf(_TPtr<char> restrict s, size_t n,
+                _TPtr<char> restrict format,
                 va_list arg);
 #endif
 
@@ -159,7 +160,7 @@ int t_vsscanf(_TNt_array_ptr<const char> restrict s,
 //            _TPtr<FILE> restrict stream);
 //_TLIB int t_getc(_TPtr<FILE> stream);
 //_TLIB int t_putc(int c, _TPtr<FILE> stream);
-//_TLIB int t_puts(_TNt_array_ptr<const char>str);
+_TLIB int t_puts(_TPtr<const char>str);
 //_TLIB int t_ungetc(int c, _TPtr<FILE> stream);
 //
 _TLIB _Itype_for_any(T) size_t t_fread(_TArray_ptr<T> restrict pointer : byte_count(size * nmemb),
@@ -183,7 +184,6 @@ _TLIB void t_rewind(_TPtr<void> stream);
 //_TLIB void t_clearerr(_TPtr<FILE> stream);
 //_TLIB int t_feof(_TPtr<FILE> stream);
 _TLIB int t_ferror(_TPtr<void> stream);
-//_TLIB void t_perror(_TNt_array_ptr<const char>s);
 
 #include "_builtin_stdio_checked.h"
 
