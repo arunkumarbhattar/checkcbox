@@ -96,11 +96,9 @@ _TLIB _Unchecked
 
 _TLIB _Unchecked
     static _TPtr<char>
-    StaticUncheckedToTStrAdaptor(char* Ip )
+    StaticUncheckedToTStrAdaptor(char* Ip, size_t len)
 {
-  int Iplen = strlen(Ip);
-  printf("Ip is %s", Ip);
-  printf("Iplen is %d", Iplen);
+  int Iplen = len;
   GlobalTaintedAdaptorStr = string_tainted_malloc(Iplen);
   t_strcpy(GlobalTaintedAdaptorStr, Ip);
   return GlobalTaintedAdaptorStr;
@@ -128,7 +126,7 @@ _TLIB static _Ptr<char> TaintedToCheckedStrAdaptor(_TPtr<char> Ip)
 {
   int Iplen = t_strlen(Ip);
   _Ptr<char> RetPtr = (_Ptr<char>)malloc<char>(Iplen*sizeof(char));
-  t_strcpy(RetPtr, Ip);
+  t_strcpy((char*)RetPtr, Ip);
   return RetPtr;
 }
 #pragma CHECKED_SCOPE pop

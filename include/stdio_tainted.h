@@ -160,10 +160,8 @@ int t_vsscanf(_TNt_array_ptr<const char> restrict s,
 //            _TPtr<FILE> restrict stream);
 //_TLIB int t_getc(_TPtr<FILE> stream);
 //_TLIB int t_putc(int c, _TPtr<FILE> stream);
-_TLIB static int t_puts(_TPtr<const char>str)
-{
-    return puts((const char*)str);
-}
+_TLIB static int t_puts(_TPtr<const char>str);
+
 //_TLIB int t_ungetc(int c, _TPtr<FILE> stream);
 //
 _TLIB _Itype_for_any(T) size_t t_fread(_TArray_ptr<T> restrict pointer : byte_count(size * nmemb),
