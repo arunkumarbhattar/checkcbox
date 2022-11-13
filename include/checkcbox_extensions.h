@@ -90,7 +90,7 @@ _TLIB _Unchecked
 {
   int Iplen = strlen((const char*)Ip);
   GlobalTaintedAdaptorStr = TNtStrRealloc(GlobalTaintedAdaptorStr, Iplen);
-  t_strcpy(GlobalTaintedAdaptorStr, (const char*)Ip);
+  t_strcpy(c_fetch_pointer_from_offset((int)GlobalTaintedAdaptorStr), (const char*)Ip);
   return GlobalTaintedAdaptorStr;
 }
 
@@ -100,9 +100,10 @@ _TLIB _Unchecked
 {
   int Iplen = len;
   GlobalTaintedAdaptorStr = string_tainted_malloc(Iplen);
-  t_strcpy(GlobalTaintedAdaptorStr, Ip);
+  t_memcpy(c_fetch_pointer_from_offset((int)GlobalTaintedAdaptorStr), Ip, len);
   return GlobalTaintedAdaptorStr;
 }
+
 
 _TLIB static _TNt_array_ptr<char> TNtStrMalloc(size_t sz) : count(sz) _Unchecked{
   if(sz >= SIZE_MAX)
@@ -122,9 +123,9 @@ _TLIB _Unchecked static _TPtr<char> CheckedToTaintedStrAdaptor(const char* Ip :
   return RetPtr;
 }
 
-_TLIB static _Ptr<char> TaintedToCheckedStrAdaptor(_TPtr<char> Ip)
+_TLIB static _Ptr<char> TaintedToCheckedStrAdaptor(_TPtr<char> Ip, size_t len)
 {
-  int Iplen = t_strlen(Ip);
+  int Iplen = len;
   _Ptr<char> RetPtr = (_Ptr<char>)malloc<char>(Iplen*sizeof(char));
   t_strcpy((char*)RetPtr, Ip);
   return RetPtr;

@@ -130,7 +130,7 @@ _TArray_ptr<char> t_strncat(_TArray_ptr<char> restrict dest,
                               size_t n);
 #endif
 
-_TLIB _Itype_for_any(T) int t_memcmp(_TPtr<const T> src1, _TPtr<const T> src2 ,
+_TLIB _Itype_for_any(T) int t_memcmp(const void* src1 : itype(_TPtr<const T>), const void* src2 : itype(_TPtr<const T>)  ,
                                  size_t n);
 
 _TLIB int t_strcmp(const char *src1 : itype(_TPtr<const char>),
