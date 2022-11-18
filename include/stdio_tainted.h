@@ -46,9 +46,9 @@
 //_TLIB extern _TPtr<FILE> t_stderr;
 //#endif
 
-_TLIB int t_remove(_TNt_array_ptr<const char> name);
-_TLIB int t_rename(_TNt_array_ptr<const char> from,
-           _TNt_array_ptr<const char> to);
+_TLIB int t_remove(_TPtr<const char> name);
+_TLIB int t_rename(_TPtr<const char> from,
+           _TPtr<const char> to);
 //_TLIB _TPtr<FILE> t_tmpfile(void);
 //_TLIB _TPtr<char> t_tmpnam(_TPtr<char> source);
 _TLIB int t_fclose(_TPtr<void> stream);
@@ -104,7 +104,7 @@ int t_sscanf(_TPtr<const char> restrict s,
 // definition of _Nt types. Additional declaration for arrays 
 // available in checkedc_extensions.h
 _TLIB _Unchecked
-int t_snprintf(_TNt_array_ptr<char> restrict s : count(n-1),
+int t_snprintf(_TPtr<char>  s,
              size_t n _Where n > 0,
              _TPtr<const char> restrict format, ...);
 #endif
