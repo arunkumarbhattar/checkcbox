@@ -53,8 +53,8 @@ _TLIB int t_rename(_TPtr<const char> from,
 //_TLIB _TPtr<char> t_tmpnam(_TPtr<char> source);
 _TLIB int t_fclose(_TPtr<void> stream);
 //_TLIB int t_fflush(_TPtr<FILE> stream);
-//_TLIB _TPtr<void> t_fopen(_TNt_array_ptr<const char> restrict filename,
-//            const char* restrict mode : itype(restrict _TNt_array_ptr<const char>));
+_TLIB _Unchecked static FILE* t_fopen(_TPtr<const char> restrict filename,
+            const char* restrict mode : itype(restrict _TPtr<const char>));
 //_TLIB _Ptr<FILE> t_freopen(_TNt_array_ptr<const char> restrict filename,
 //              _TNt_array_ptr<const char> restrict mode,
 //              _Ptr<FILE> restrict stream);
@@ -94,7 +94,7 @@ int t_sprintf(_TArray_ptr<char> restrict s,
 #endif
 _TLIB _Unchecked
 int t_sscanf(_TPtr<const char> restrict s,
-             _TPtr<const char> restrict format, ...);
+             const char* format : itype(_TPtr<const char>), ...);
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_snprintf)
 #undef t_snprintf

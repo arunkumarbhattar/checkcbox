@@ -157,7 +157,7 @@ size_t t_strxfrm(_TArray_ptr<char> restrict dest : count(n),
 _Itype_for_any(T) _TArray_ptr<T> t_memchr(_TArray_ptr<T> s : byte_count(n), int c, size_t n) :
                                                                               byte_count(n);
 
-_TPtr<char> t_strchr(_TPtr<const char> s, int c);
+_TPtr<char> t_strchr(const char* s : itype(_TPtr<const char>), int c);
 
 size_t t_strcspn(_TNt_array_ptr<const char> s1,
                _TNt_array_ptr<const char> s2);
