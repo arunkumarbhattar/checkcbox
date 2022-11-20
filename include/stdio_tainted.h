@@ -104,17 +104,17 @@ int t_sscanf(_TPtr<const char> restrict s,
 // definition of _Nt types. Additional declaration for arrays 
 // available in checkedc_extensions.h
 _TLIB _Unchecked
-int t_snprintf(_TPtr<char>  s,
+int t_snprintf(char* s : itype(_TPtr<char>),
              size_t n _Where n > 0,
-             _TPtr<const char> restrict format, ...);
+             const char* restrict format : itype(_TPtr<const char > restrict), ...);
 #endif
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_vfprintf)
 #undef t_vfprintf
-//_TLIB _Unchecked
-//int t_vfprintf(_TPtr<FILE> restrict stream,
-//               _TNt_array_ptr<const char> restrict format,
-//             va_list arg);
+_TLIB _Unchecked
+int t_vfprintf(FILE* restrict stream,
+               const char*  restrict format : itype(_TPtr<const char> restrict),
+             va_list arg);
 #endif
 //_TLIB _Unchecked
 //int t_vfscanf(_TPtr<FILE> restrict stream,

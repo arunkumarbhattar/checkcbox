@@ -99,9 +99,10 @@ _TLIB _Unchecked
     StaticUncheckedToTStrAdaptor(char* Ip, size_t len)
 {
   int Iplen = len;
-  GlobalTaintedAdaptorStr = string_tainted_malloc(Iplen);
-  t_memcpy(c_fetch_pointer_from_offset((int)GlobalTaintedAdaptorStr), Ip, len);
-  return GlobalTaintedAdaptorStr;
+  _TPtr<char> Tptr = NULL;
+  Tptr = string_tainted_malloc(Iplen);
+  t_memcpy(c_fetch_pointer_from_offset((int)Tptr), Ip, len);
+  return Tptr;
 }
 
 
@@ -126,6 +127,8 @@ _TLIB _Unchecked static _TPtr<char> CheckedToTaintedStrAdaptor(const char* Ip :
 _TLIB static _Ptr<char> TaintedToCheckedStrAdaptor(_TPtr<char> Ip, size_t len)
 {
   int Iplen = len;
+  if (Iplen == 0)
+    return NULL;
   _Ptr<char> RetPtr = (_Ptr<char>)malloc<char>(Iplen*sizeof(char));
   t_strcpy((char*)RetPtr, Ip);
   return RetPtr;

@@ -178,7 +178,7 @@ _TNt_array_ptr<char> t_strerror(int errnum);
 
 size_t t_strlen(_TPtr<const char> s);
 
-_TNt_array_ptr<char> t_strdup(_TPtr<const char> s);
+_Ptr<char> t_strdup(_TPtr<const char> s);
 #pragma TLIB_SCOPE pop
 #include "_builtin_string_tainted.h"
 
