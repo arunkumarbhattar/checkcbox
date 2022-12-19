@@ -89,7 +89,7 @@ _Unchecked int t_scanf(const char * restrict format : itype (restrict _TPtr<cons
 #if _FORTIFY_SOURCE == 0 || !defined(t_sprintf)
 #undef t_sprintf
 _TLIB _Unchecked
-int t_sprintf(_TArray_ptr<char> restrict s,
+int t_sprintf(char* restrict s : itype(_TPtr<char> restrict),
               const char* restrict format : itype(_TPtr<const char> restrict), ...);
 #endif
 _TLIB _Unchecked
@@ -156,8 +156,8 @@ int t_vsscanf(_TNt_array_ptr<const char> restrict s,
 //_TLIB _TArray_ptr<char> t_fgets(_TArray_ptr<char> restrict s : count(n), int n,
 //                   _TPtr<FILE> restrict stream) :
 //  bounds(s, s + n);
-//_TLIB int t_fputs(_TNt_array_ptr<const char> restrict s,
-//            _TPtr<FILE> restrict stream);
+//_TLIB int t_fputs(_TPtr<const char> restrict s,
+//            FILE* restrict stream : itype(restrict _TPtr<FILE>));
 //_TLIB int t_getc(_TPtr<FILE> stream);
 //_TLIB int t_putc(int c, _TPtr<FILE> stream);
 _TLIB static int t_puts(_TPtr<const char>str);

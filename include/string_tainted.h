@@ -87,7 +87,7 @@ _TLIB static int t_strncasecmp(const char *src : itype(_TPtr<const char>),
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_memset)
 #undef t_memset
-_Itype_for_any(T) _TArray_ptr<T> t_memset(_TPtr<T> dest,
+_TLIB _Itype_for_any(T) _TArray_ptr<T> t_memset(_TPtr<T> dest,
                                             int c,
                                             size_t n) : byte_count(n);
 #endif
@@ -154,8 +154,7 @@ size_t t_strxfrm(_TArray_ptr<char> restrict dest : count(n),
                    _TArray_ptr<const char> restrict src,
                    size_t n);
 
-_Itype_for_any(T) _TArray_ptr<T> t_memchr(_TArray_ptr<T> s : byte_count(n), int c, size_t n) :
-                                                                              byte_count(n);
+_Itype_for_any(T) _TPtr<T> t_memchr(_TPtr<T> s , int c, size_t n);
 
 _TPtr<char> t_strchr(const char* s : itype(_TPtr<const char>), int c);
 
