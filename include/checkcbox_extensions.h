@@ -19,7 +19,6 @@
 
 #pragma TLIB_SCOPE push
 #pragma TLIB_SCOPE on
-extern doublecl BytesMarshalled = 0.0;
 int c_isPointerToTaintedMem(void* pointer);
 
 void* c_fetch_pointer_from_offset(const unsigned int pointer_offset);
@@ -46,28 +45,32 @@ int sbx_register_callback(const void* chosen_interceptor, int no_of_args,
 
 // default strncmp has a bounds-safe interface tnt_array_ptr;
 // this option is for tarray_ptr
-inline int __attribute__((__always_inline__))
+ int __attribute__((__always___))
 t_strncmp_array_ptr(_TArray_ptr<const char> src : count(n), _TArray_ptr<const char> s2 : count(n), size_t n);
 
 // default snprintf assumes nt_array_ptr for bounds-safe interface
 // this option is for array_ptr
-// clang does not inline functions that use va_list/va_start/va_end to
+// clang does not  functions that use va_list/va_start/va_end to
 // access variable number of arguments.
-_Unchecked inline static int
+_Unchecked  static int
 t_snprintf_array_ptr( _TArray_ptr<char> restrict s : count(n),
                        size_t n,
                        _TNt_array_ptr<const char> restrict format,
                        ...);
-_TLIB inline static _TNt_array_ptr<char> string_tainted_malloc(size_t sz) : count(sz) _Unchecked{
+_TLIB  static _TNt_array_ptr<char> string_tainted_malloc(size_t sz) : count(sz) _Unchecked{
+#ifdef WASM_SBX
   if(sz >= SIZE_MAX)
     return NULL;
   _TArray_ptr<char> p : count(sz+1) = (_TArray_ptr<char>)t_malloc(sz + 1);
   if (p != NULL)
     p[sz] = 0;
   return _Tainted_Assume_bounds_cast<_TNt_array_ptr<char>>(p, count(sz));
+#else
+  return (_TNt_array_ptr<char>)malloc(sz);
+#endif
 }
 
-_TLIB inline static _Ptr<char> StrMalloc(size_t sz)
+_TLIB  static _Ptr<char> StrMalloc(size_t sz)
      _Unchecked {
   if (sz >= SIZE_MAX)
     return NULL;
@@ -79,81 +82,109 @@ _TLIB inline static _Ptr<char> StrMalloc(size_t sz)
 
 static _TPtr<char> TNtStrRealloc(_TPtr<char> old_mem, size_t sz)
     _Unchecked {
+#ifdef WASM_SBX
   if (sz >= SIZE_MAX)
     return NULL;
   _TPtr<char> p = t_realloc<char>(old_mem, sz + 1);
   if (p != NULL)
     p[sz] = 0;
   return p;
+#else
+        return (_TPtr<char>)realloc((void*)old_mem, sz);
+#endif
 }
 static _TPtr<char> GlobalTaintedAdaptorStr = NULL;
 
-_TLIB inline static _TPtr<char> StaticStrToTStr(char* Ip)
+_TLIB  static _TPtr<char> StaticStrToTStr(char* Ip)
 {
+#ifdef WASM_SBX
         size_t len = strlen(Ip);
         GlobalTaintedAdaptorStr = string_tainted_malloc(len);
         t_strcpy(GlobalTaintedAdaptorStr, Ip);
         return GlobalTaintedAdaptorStr;
+#else
+        return (_TPtr<char>)Ip;
+#endif
 }
 
 _TLIB _Unchecked
-    inline static _TPtr<char>
+     static _TPtr<char>
         StaticCheckedToTStrAdaptor(_Nt_array_ptr<char> Ip )
 {
+#ifdef WASM_SBX
   int Iplen = strlen((const char*)Ip);
-  BytesMarshalled += Iplen;
-  printf("BytesMarshalled = %f", BytesMarshalled);
+//  BytesMarshalled += Iplen;
+//  printf("BytesMarshalled = %f", BytesMarshalled);
   _TPtr<char> retVal = TNtStrRealloc(GlobalTaintedAdaptorStr, Iplen);
   t_strcpy(c_fetch_pointer_from_offset((int)retVal), (const char*)Ip);
   return retVal;
+#else
+        return (_TPtr<char>)Ip;
+#endif
 }
 
 _TLIB _Unchecked
-    inline static _TPtr<char>
+     static _TPtr<char>
     StaticUncheckedToTStrAdaptor(char* Ip, size_t len)
 {
+#ifdef WASM_SBX
   if (len <= 0)
     return NULL;
   int Iplen = len;
   _TPtr<char> Tptr = NULL;
-  BytesMarshalled += Iplen;
-  printf("BytesMarshalled = %f", BytesMarshalled);
+//  BytesMarshalled += Iplen;
+//  printf("BytesMarshalled = %f", BytesMarshalled);
   Tptr = string_tainted_malloc(Iplen);
   t_memcpy(c_fetch_pointer_from_offset((int)Tptr), Ip, len);
   return Tptr;
+#else
+        return ( _TPtr<char>)Ip;
+#endif
 }
 
 
-_TLIB inline static _TNt_array_ptr<char> TNtStrMalloc(size_t sz) : count(sz) _Unchecked{
+_TLIB  static _TNt_array_ptr<char> TNtStrMalloc(size_t sz) : count(sz) _Unchecked{
+#ifdef WASM_SBX
   if(sz >= SIZE_MAX)
     return NULL;
   _TArray_ptr<char> p : count(sz+1) = (_TArray_ptr<char>)t_malloc<char>(sz + 1);
   if (p != NULL)
     p[sz] = 0;
   return _Tainted_Assume_bounds_cast<_TNt_array_ptr<char>>(p, count(sz));
+#else
+        return (_TNt_array_ptr<char> )malloc(sz);
+#endif
 }
 
-_TLIB _Unchecked inline static _TPtr<char> CheckedToTaintedStrAdaptor(const char* Ip :
+_TLIB _Unchecked  static _TPtr<char> CheckedToTaintedStrAdaptor(const char* Ip :
                                                                itype(_Nt_array_ptr<const char>))
 {
+#ifdef WASM_SBX
   int Iplen = strlen(Ip);
   _TPtr<char> RetPtr = string_tainted_malloc(Iplen*sizeof(char));
-  BytesMarshalled += Iplen;
-  printf("BytesMarshalled = %f", BytesMarshalled);
+//  BytesMarshalled += Iplen;
+//  printf("BytesMarshalled = %f", BytesMarshalled);
   t_strcpy(RetPtr, (const char*)Ip);
   return RetPtr;
+#else
+        return (_TPtr<char>)Ip;
+#endif
 }
 
-_TLIB inline static _Ptr<char> TaintedToCheckedStrAdaptor(_TPtr<char> Ip, size_t len)
+_TLIB  static _Ptr<char> TaintedToCheckedStrAdaptor(_TPtr<char> Ip, size_t len)
 {
+#ifdef WASM_SBX
   int Iplen = len;
   if (Iplen == 0)
     return NULL;
   _Ptr<char> RetPtr = (_Ptr<char>)malloc<char>(Iplen*sizeof(char));
-  BytesMarshalled += Iplen;
-  printf("BytesMarshalled = %f", BytesMarshalled);
+//  BytesMarshalled += Iplen;
+//  printf("BytesMarshalled = %f", BytesMarshalled);
   t_strcpy((char*)RetPtr, Ip);
   return RetPtr;
+#else
+        return (_Ptr<char>)Ip;
+#endif
 }
 #pragma CHECKED_SCOPE pop
 #pragma TLIB_SCOPE pop
