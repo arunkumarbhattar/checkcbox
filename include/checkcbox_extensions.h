@@ -218,6 +218,8 @@ _TLIB _Unchecked  static _TPtr<char> CheckedToTaintedStrAdaptor(const char* Ip :
 #elif HEAP_SBX
   int Iplen = strlen(Ip);
   _TPtr<char> RetPtr = string_tainted_malloc(Iplen*sizeof(char));
+//  BytesMarshalled += Iplen;
+//  printf("BytesMarshalled = %f", BytesMarshalled);
   t_strcpy(RetPtr, (const char*)Ip);
   return RetPtr;
 #else
@@ -232,6 +234,8 @@ _TLIB  static _Ptr<char> TaintedToCheckedStrAdaptor(_TPtr<char> Ip, size_t len)
   if (Iplen == 0)
     return NULL;
   _Ptr<char> RetPtr = (_Ptr<char>)malloc<char>(Iplen*sizeof(char));
+//  BytesMarshalled += Iplen;
+//  printf("BytesMarshalled = %f", BytesMarshalled);
   t_strcpy((char*)RetPtr, Ip);
   return RetPtr;
 #elif HEAP_SBX
