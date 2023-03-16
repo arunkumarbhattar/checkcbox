@@ -87,7 +87,7 @@ _TLIB static int t_strncasecmp(const char *src : itype(_TPtr<const char>),
 
 #if _FORTIFY_SOURCE == 0 || !defined(t_memset)
 #undef t_memset
-_Itype_for_any(T) _TArray_ptr<T> t_memset(_TPtr<T> dest,
+_TLIB _Itype_for_any(T) _TArray_ptr<T> t_memset(_TPtr<T> dest,
                                             int c,
                                             size_t n) : byte_count(n);
 #endif
@@ -154,10 +154,9 @@ size_t t_strxfrm(_TArray_ptr<char> restrict dest : count(n),
                    _TArray_ptr<const char> restrict src,
                    size_t n);
 
-_Itype_for_any(T) _TArray_ptr<T> t_memchr(_TArray_ptr<T> s : byte_count(n), int c, size_t n) :
-                                                                              byte_count(n);
+_Itype_for_any(T) _TPtr<T> t_memchr(_TPtr<T> s , int c, size_t n);
 
-_TPtr<char> t_strchr(_TPtr<const char> s, int c);
+_TPtr<char> t_strchr(const char* s : itype(_TPtr<const char>), int c);
 
 size_t t_strcspn(_TNt_array_ptr<const char> s1,
                _TNt_array_ptr<const char> s2);
@@ -178,7 +177,7 @@ _TNt_array_ptr<char> t_strerror(int errnum);
 
 size_t t_strlen(_TPtr<const char> s);
 
-_TNt_array_ptr<char> t_strdup(_TPtr<const char> s);
+_Ptr<char> t_strdup(_TPtr<const char> s);
 #pragma TLIB_SCOPE pop
 #include "_builtin_string_tainted.h"
 
