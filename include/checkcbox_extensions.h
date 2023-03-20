@@ -41,15 +41,6 @@ void* c_fetch_pointer_from_sandbox(unsigned int);
 int sbx_register_callback(const void* chosen_interceptor, int no_of_args,
                           int does_return, int arg_types[]);
 
-extern _Itype_for_any(T) _TPtr<T> hoard_malloc(size_t size);
-extern _Itype_for_any(T) void hoard_free(_TPtr<T> ptr);
-extern _Itype_for_any(T) _TArray_ptr<T> hoard_realloc(_TPtr<T> pointer, size_t size);
-
-extern _Itype_for_any(T) _TArray_ptr<T> hoard_calloc(size_t nmemb, size_t size);
-extern int isPointerinHeap(void *p);
-extern int CacheUpdateandCheck(void *p);
-extern _Tainted void registerCallback(_TPtr<void> callbackFunc);
-extern _Tainted void unregisterCallback(_TPtr<void> callbackFunc);
 
 #pragma CHECKED_SCOPE push
 #pragma CHECKED_SCOPE on
@@ -163,7 +154,7 @@ _TLIB _Unchecked
     StaticUncheckedToTStrAdaptor(char* Ip, size_t len)
 {
 #ifdef WASM_SBX
-  if (len <= 0)
+  if (len < 0)
     return NULL;
   int Iplen = len;
   _TPtr<char> Tptr = NULL;
@@ -173,7 +164,7 @@ _TLIB _Unchecked
   t_memcpy(c_fetch_pointer_from_offset((int)Tptr), Ip, len);
   return Tptr;
 #elif HEAP_SBX
-  if (len <= 0)
+  if (len < 0)
           return NULL;
   int Iplen = len;
   _TPtr<char> Tptr = NULL;
