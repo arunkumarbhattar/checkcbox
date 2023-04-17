@@ -158,8 +158,9 @@ _Itype_for_any(T) _TPtr<T> t_memchr(_TPtr<T> s , int c, size_t n);
 
 _TPtr<char> t_strchr(const char* s : itype(_TPtr<const char>), int c);
 
-size_t t_strcspn(_TNt_array_ptr<const char> s1,
-               _TNt_array_ptr<const char> s2);
+size_t t_strcspn( const char* s1  : itype(_TPtr<const char>),
+                   const char* s2  : itype(_TPtr<const char>)) ;
+extern _TPtr<char> t_strndup (_TPtr<const char> __string, size_t __n);
 
 _TPtr<char> t_strpbrk(const char *s1 : itype(_TPtr<const char>),
                         const char *s2 : itype(_TPtr<const char>));
@@ -177,7 +178,7 @@ _TNt_array_ptr<char> t_strerror(int errnum);
 
 size_t t_strlen(_TPtr<const char> s);
 
-_Ptr<char> t_strdup(_TPtr<const char> s);
+_TPtr<char> t_strdup(_TPtr<const char> s);
 #pragma TLIB_SCOPE pop
 #include "_builtin_string_tainted.h"
 

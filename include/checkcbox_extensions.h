@@ -217,6 +217,7 @@ _TLIB _Unchecked  static _TPtr<char> CheckedToTaintedStrAdaptor(const char* Ip :
 #endif
 }
 
+
 _TLIB  static _Ptr<char> TaintedToCheckedStrAdaptor(_TPtr<char> Ip, size_t len)
 {
 #ifdef WASM_SBX
