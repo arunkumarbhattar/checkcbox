@@ -19,24 +19,35 @@
 // TODO: express alignment constraints once where clauses have been added.
 #ifdef WASM_SBX
 _Itype_for_any(T) _TArray_ptr<T> t_malloc(size_t size);
-
 _Itype_for_any(T) void t_free(_TPtr<T> pointer);
-
 _Itype_for_any(T) _TArray_ptr<T> t_realloc(_TPtr<T> pointer, size_t size);
-
 _Itype_for_any(T) _TArray_ptr<T> t_calloc(size_t nmemb, size_t size);
-#elif HEAP_SBX
+
+#define __malloc__(size) t_malloc(size)
+#define __free__(ptr) t_free(ptr)
+#define __realloc__(ptr, size) t_realloc(ptr, size)
+#define __calloc__(nmemb, size) t_calloc(nmemb, size)
+
+#elif defined(HEAP_SBX)
 
 extern _Itype_for_any(T) _TPtr<T> hoard_malloc(size_t size);
 extern _Itype_for_any(T) void hoard_free(_TPtr<T> ptr);
 extern _Itype_for_any(T) _TArray_ptr<T> hoard_realloc(_TPtr<T> pointer, size_t size);
-
 extern _Itype_for_any(T) _TArray_ptr<T> hoard_calloc(size_t nmemb, size_t size);
+
+#define __malloc__(size) hoard_malloc(size)
+#define __free__(ptr) hoard_free(ptr)
+#define __realloc__(ptr, size) hoard_realloc(ptr, size)
+#define __calloc__(nmemb, size) hoard_calloc(nmemb, size)
+
+#endif
+
+
 extern int isPointerinHeap(void *p);
 extern int CacheUpdateandCheck(void *p);
 extern _Tainted void registerCallback(_TPtr<void> callbackFunc);
 extern _Tainted void unregisterCallback(_TPtr<void> callbackFunc);
-#endif
+
 
 /* Convert a string to a floating-point number.  */
 extern double t_strtod (_TPtr<char> __restrict __nptr,
